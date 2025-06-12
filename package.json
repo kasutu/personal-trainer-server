@@ -1,0 +1,53 @@
+{
+  "name": "personal-trainer-server",
+  "version": "0.0.1",
+  "main": "./dist/src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "NODE_ENV=production bun .",
+    "dev": "nodemon src/index.ts",
+    "build": "swc src -d dist --source-maps --copy-files",
+    "db:generate": "bunx prisma generate",
+    "db:migrate": "bunx prisma migrate dev",
+    "db:studio": "bunx prisma studio",
+    "db:seed": "bunx prisma db seed",
+    "db:reset": "bunx prisma migrate reset --force",
+    "db:push": "bunx prisma db push"
+  },
+  "devDependencies": {
+    "@swc/cli": "^0.6.0",
+    "@swc/core": "^1.10.16",
+    "@types/bun": "latest",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.5.0",
+    "@prisma/client": "^6.4.0",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.13.4",
+    "@types/uuid": "^10.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "morgan": "^1.10.0",
+    "prisma": "^6.4.0",
+    "reflect-metadata": "^0.2.2",
+    "socket.io": "^4.8.1",
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.19.2",
+    "typedi": "^0.10.0",
+    "uuid": "^11.0.5",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
+  },
+  "prisma": {
+    "schema": "./src/db/schema.prisma",
+    "seed": "bun ./src/db/seed.ts"
+  }
+}

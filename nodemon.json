@@ -1,0 +1,8 @@
+{
+  "ext": "ts, js, json, prisma",
+  "watch": ["src", "src/db", ".env"],
+  "ignore": ["node_modules", ".git", "src/logs/*", "src/**/*.{spec,test}.ts"],
+  "execMap": {
+    "ts": "bunx prisma generate && bun"
+  }
+}

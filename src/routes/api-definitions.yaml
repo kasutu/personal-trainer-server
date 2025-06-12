@@ -1,0 +1,541 @@
+openapi: "3.0.1"
+info:
+  title: "SILID Server API"
+  version: "1.0.0"
+  description: "API documentation for SILID server routes."
+servers:
+  - url: "http://localhost:4000"
+    description: "Development Server"
+paths:
+  /api/system:
+    get:
+      tags:
+        - System
+      summary: "Get system information"
+      responses:
+        "200":
+          description: "Successful response"
+
+  # Building endpoints
+  /api/v1/buildings:
+    get:
+      tags:
+        - Building
+      summary: "List all buildings"
+      responses:
+        "200":
+          description: "Successful response"
+    post:
+      tags:
+        - Building
+      summary: "Create a new building"
+      requestBody:
+        description: "Building payload based on Prisma model Building. 'name' is required and you can pass nested space creation data."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - spaces
+              properties:
+                name:
+                  type: string
+                  description: "The name of the building."
+                spaces:
+                  type: object
+                  description: "Nested payload to create associated spaces."
+                  properties:
+                    create:
+                      type: array
+                      description: "List of spaces to create."
+                      items:
+                        type: object
+                        required:
+                          - name
+                          - type
+                        properties:
+                          name:
+                            type: string
+                            description: "Name of the space."
+                          type:
+                            type: string
+                            description: "Type of the space, e.g., office, lobby, conference, etc."
+                      example:
+                        - name: "Fake Lobby"
+                          type: "lobby"
+                        - name: "Fake Office"
+                          type: "office"
+            example:
+              id: "fake-building-id"
+              name: "Fake Building"
+              spaces:
+                create:
+                  - name: "Fake Lobby"
+                    type: "lobby"
+                  - name: "Fake Office"
+                    type: "office"
+      responses:
+        "201":
+          description: "Building created"
+  /api/v1/buildings/{id}:
+    get:
+      tags:
+        - Building
+      summary: "Get a building by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-building-id"
+      responses:
+        "200":
+          description: "Successful response"
+    put:
+      tags:
+        - Building
+      summary: "Update a building by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-building-id"
+      requestBody:
+        description: "Update the building name."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: "New building name."
+              example:
+                name: "Updated Fake Building"
+      responses:
+        "200":
+          description: "Building updated"
+    delete:
+      tags:
+        - Building
+      summary: "Delete a building by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-building-id"
+      responses:
+        "204":
+          description: "Building deleted"
+  /api/v1/buildings/{id}/restore:
+    patch:
+      tags:
+        - Building
+      summary: "Restore a deleted building by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-building-id"
+      responses:
+        "200":
+          description: "Building restored"
+  /api/v1/buildings/{id}/hard:
+    delete:
+      tags:
+        - Building
+      summary: "Hard delete a building by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-building-id"
+      responses:
+        "204":
+          description: "Building hard deleted"
+
+  # Space Provider endpoints
+  /api/v1/space-providers:
+    get:
+      tags:
+        - SpaceProvider
+      summary: "List all space providers"
+      responses:
+        "200":
+          description: "Successful response"
+    post:
+      tags:
+        - SpaceProvider
+      summary: "Create a new space provider"
+      requestBody:
+        description: "SpaceProvider payload based on Prisma model SpaceProvider."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: "The name of the space provider."
+              example:
+                name: "Fake Space Provider"
+      responses:
+        "201":
+          description: "Space provider created"
+  /api/v1/space-providers/{id}:
+    get:
+      tags:
+        - SpaceProvider
+      summary: "Get a space provider by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-provider-id"
+      responses:
+        "200":
+          description: "Successful response"
+    put:
+      tags:
+        - SpaceProvider
+      summary: "Update a space provider by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-provider-id"
+      requestBody:
+        description: "Payload to update the space provider's name."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: "Updated name of the space provider."
+              example:
+                name: "Updated Fake Provider"
+      responses:
+        "200":
+          description: "Space provider updated"
+    delete:
+      tags:
+        - SpaceProvider
+      summary: "Delete a space provider by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-provider-id"
+      responses:
+        "204":
+          description: "Space provider deleted"
+  /api/v1/space-providers/{id}/restore:
+    patch:
+      tags:
+        - SpaceProvider
+      summary: "Restore a deleted space provider by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-provider-id"
+      responses:
+        "200":
+          description: "Space provider restored"
+  /api/v1/space-providers/{id}/hard:
+    delete:
+      tags:
+        - SpaceProvider
+      summary: "Hard delete a space provider by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-provider-id"
+      responses:
+        "204":
+          description: "Space provider hard deleted"
+
+  # Space Seeker endpoints
+  /api/v1/space-seeker:
+    get:
+      tags:
+        - SpaceSeeker
+      summary: "List all space seekers"
+      responses:
+        "200":
+          description: "Successful response"
+    post:
+      tags:
+        - SpaceSeeker
+      summary: "Create a new space seeker"
+      requestBody:
+        description: "SpaceSeeker payload based on Prisma model SpaceSeeker."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: "Name of the space seeker."
+              example:
+                name: "Fake Space Seeker"
+      responses:
+        "201":
+          description: "Space seeker created"
+  /api/v1/space-seeker/{id}:
+    get:
+      tags:
+        - SpaceSeeker
+      summary: "Get a space seeker by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-seeker-id"
+      responses:
+        "200":
+          description: "Successful response"
+    put:
+      tags:
+        - SpaceSeeker
+      summary: "Update a space seeker by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-seeker-id"
+      requestBody:
+        description: "Payload to update the space seeker."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: "Updated name of the space seeker."
+              example:
+                name: "Updated Fake Seeker"
+      responses:
+        "200":
+          description: "Space seeker updated"
+    delete:
+      tags:
+        - SpaceSeeker
+      summary: "Delete a space seeker by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-seeker-id"
+      responses:
+        "204":
+          description: "Space seeker deleted"
+  /api/v1/space-seeker/{id}/restore:
+    patch:
+      tags:
+        - SpaceSeeker
+      summary: "Restore a deleted space seeker by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-seeker-id"
+      responses:
+        "200":
+          description: "Space seeker restored"
+  /api/v1/space-seeker/{id}/hard:
+    delete:
+      tags:
+        - SpaceSeeker
+      summary: "Hard delete a space seeker by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-seeker-id"
+      responses:
+        "204":
+          description: "Space seeker hard deleted"
+
+  # Space endpoints
+  /api/v1/spaces:
+    get:
+      tags:
+        - Space
+      summary: "List all spaces"
+      responses:
+        "200":
+          description: "Successful response"
+    post:
+      tags:
+        - Space
+      summary: "Create a new space"
+      requestBody:
+        description: "Space payload based on Prisma model Space; required fields are name and type, with an optional buildingId relation. If the relation is nullable, it is kept as null."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - type
+              properties:
+                name:
+                  type: string
+                  description: "The name of the space."
+                type:
+                  type: string
+                  description: "The type of the space (e.g., office, lobby, conference, etc.)."
+                buildingId:
+                  type: string
+                  nullable: true
+                  description: "Optional related building ID. Use null if not provided."
+              example:
+                id: "fake-space-id"
+                name: "Fake Office Space"
+                type: "office"
+      responses:
+        "201":
+          description: "Space created"
+  /api/v1/spaces/{id}:
+    get:
+      tags:
+        - Space
+      summary: "Get a space by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-id"
+      responses:
+        "200":
+          description: "Successful response"
+    put:
+      tags:
+        - Space
+      summary: "Update a space by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-id"
+      requestBody:
+        description: "Payload to update a space. Use the same fields as for creation. For nullable relations, use null if not updating."
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: "Updated space name."
+                type:
+                  type: string
+                  description: "Updated space type."
+                buildingId:
+                  type: string
+                  nullable: true
+                  description: "Updated optional building ID."
+                  example: "fake-building-id"
+              example:
+                name: "Updated Fake Office Space"
+                type: "conference"
+                buildingId: "fake-building-id"
+      responses:
+        "200":
+          description: "Space updated"
+    delete:
+      tags:
+        - Space
+      summary: "Delete a space by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-id"
+      responses:
+        "204":
+          description: "Space deleted"
+  /api/v1/spaces/{id}/restore:
+    patch:
+      tags:
+        - Space
+      summary: "Restore a deleted space by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-id"
+      responses:
+        "200":
+          description: "Space restored"
+  /api/v1/spaces/{id}/hard:
+    delete:
+      tags:
+        - Space
+      summary: "Hard delete a space by ID"
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "fake-space-id"
+      responses:
+        "204":
+          description: "Space hard deleted"

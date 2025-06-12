@@ -1,0 +1,63 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["public", "users", "transactional", "system", "bridge"]
+}
+
+model Building {
+  id     String  @id @default(cuid())
+  name   String
+  spaces Space[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  deleted    Boolean  @default(false)
+
+  @@map("building")
+  @@schema("public")
+}
+
+model Space {
+  id   String @id @default(cuid())
+  name String
+  type String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  deleted    Boolean  @default(false)
+
+  buildingId String?
+  building   Building? @relation(fields: [buildingId], references: [id])
+
+  @@map("space")
+  @@schema("public")
+}
+
+model SpaceProvider {
+  id   String @id @default(cuid())
+  name String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  deleted    Boolean  @default(false)
+
+  @@map("space_provider")
+  @@schema("users")
+}
+
+model SpaceSeeker {
+  id   String @id @default(cuid())
+  name String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  deleted    Boolean  @default(false)
+
+  @@map("space_seekers")
+  @@schema("users")
+}
