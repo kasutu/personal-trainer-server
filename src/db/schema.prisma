@@ -1,63 +1,201 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
-  schemas  = ["public", "users", "transactional", "system", "bridge"]
 }
 
-model Building {
-  id     String  @id @default(cuid())
-  name   String
-  spaces Space[]
+model Membership {
+  membership_id          Int     @id @default(autoincrement())
+  membership_name        String  @db.VarChar(255)
+  membership_description String? @db.Text
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  deleted    Boolean  @default(false)
+  services             Service[]
+  member_subscriptions MemberSubscription[]
+  standard_programs    StandardProgram[]
 
-  @@map("building")
-  @@schema("public")
+  @@map("membership")
 }
 
-model Space {
-  id   String @id @default(cuid())
-  name String
-  type String
+model Service {
+  service_id           Int    @id @default(autoincrement())
+  membership_id        Int
+  service_name         String @db.VarChar(255)
+  service_availability String @db.VarChar(100)
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  deleted    Boolean  @default(false)
+  membership Membership @relation(fields: [membership_id], references: [membership_id], onDelete: Cascade)
 
-  buildingId String?
-  building   Building? @relation(fields: [buildingId], references: [id])
-
-  @@map("space")
-  @@schema("public")
+  @@map("service")
 }
 
-model SpaceProvider {
-  id   String @id @default(cuid())
-  name String
+model Member {
+  member_id     Int      @id @default(autoincrement())
+  first_name    String   @db.VarChar(100)
+  middle_name   String?  @db.VarChar(100)
+  last_name     String   @db.VarChar(100)
+  gender        String   @db.VarChar(10)
+  date_of_birth DateTime @db.Date
+  email         String   @unique @db.VarChar(255)
+  number        String   @db.VarChar(20)
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  deleted    Boolean  @default(false)
+  member_subscriptions         MemberSubscription[]
+  standard_program_enrollments StandardProgramEnrollment[]
+  personalized_programs        PersonalizedProgram[]
+  member_account_credentials   MemberAccountCredentials?
 
-  @@map("space_provider")
-  @@schema("users")
+  @@map("member")
 }
 
-model SpaceSeeker {
-  id   String @id @default(cuid())
-  name String
+model MemberRegistration {
+  registration_id      Int      @id @default(autoincrement())
+  first_name           String   @db.VarChar(100)
+  middle_name          String?  @db.VarChar(100)
+  last_name            String   @db.VarChar(100)
+  gender               String   @db.VarChar(10)
+  date_of_birth        DateTime @db.Date
+  email                String   @db.VarChar(255)
+  number               String   @db.VarChar(20)
+  date_of_application  DateTime @db.Date
+  service_membership   String   @db.VarChar(255)
+  month_of_application Int
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  deleted    Boolean  @default(false)
+  member_standard_preference_logs MemberStandardPreferenceLog[]
 
-  @@map("space_seekers")
-  @@schema("users")
+  @@map("member_registration")
+}
+
+model MemberSubscription {
+  subscription_id     Int      @id @default(autoincrement())
+  member_id           Int
+  membership_id       Int
+  start_date          DateTime @db.Date
+  end_date            DateTime @db.Date
+  subscription_status String   @db.VarChar(50)
+
+  member     Member     @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
+  membership Membership @relation(fields: [membership_id], references: [membership_id], onDelete: Cascade)
+
+  @@map("member_subscription")
+}
+
+model MemberAccountCredentials {
+  member_account_credentials_id Int    @id @default(autoincrement())
+  member_id                     Int    @unique
+  username                      String @unique @db.VarChar(100)
+  hashed_password               String @db.VarChar(255)
+
+  member Member @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
+
+  @@map("member_account_credentials")
+}
+
+model Instructor {
+  instructor_id Int      @id @default(autoincrement())
+  first_name    String   @db.VarChar(100)
+  middle_name   String?  @db.VarChar(100)
+  last_name     String   @db.VarChar(100)
+  gender        String   @db.VarChar(10)
+  date_of_birth DateTime @db.Date
+  email         String   @unique @db.VarChar(255)
+  number        String   @db.VarChar(20)
+
+  standard_programs              StandardProgram[]
+  personalized_programs          PersonalizedProgram[]
+  instructor_account_credentials InstructorAccountCredentials?
+
+  @@map("instructor")
+}
+
+model InstructorAccountCredentials {
+  instructor_account_credentials_id Int    @id @default(autoincrement())
+  instructor_id                     Int    @unique
+  username                          String @unique @db.VarChar(100)
+  hashed_password                   String @db.VarChar(255)
+
+  instructor Instructor @relation(fields: [instructor_id], references: [instructor_id], onDelete: Cascade)
+
+  @@map("instructor_account_credentials")
+}
+
+model StandardProgram {
+  standard_program_id              Int     @id @default(autoincrement())
+  instructor_id                    Int
+  membership_id                    Int
+  personalized_program_name        String  @db.VarChar(255)
+  personalized_program_description String? @db.Text
+
+  instructor                   Instructor                  @relation(fields: [instructor_id], references: [instructor_id], onDelete: Cascade)
+  membership                   Membership                  @relation(fields: [membership_id], references: [membership_id], onDelete: Cascade)
+  standard_program_enrollments StandardProgramEnrollment[]
+
+  @@map("standard_program")
+}
+
+model StandardProgramEnrollment {
+  standard_program_enrollment_id Int      @id @default(autoincrement())
+  member_id                      Int
+  standard_program_id            Int
+  goals                          String?  @db.Text
+  start_date                     DateTime @db.Date
+  sa_date                        DateTime @db.Date
+  end_date                       DateTime @db.Date
+
+  member           Member          @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
+  standard_program StandardProgram @relation(fields: [standard_program_id], references: [standard_program_id], onDelete: Cascade)
+
+  @@map("standard_program_enrollment")
+}
+
+model MemberStandardPreferenceLog {
+  member_standard_preference_log_id Int     @id @default(autoincrement())
+  registration_id                   Int
+  goals                             String? @db.Text
+  recorded_availability             String  @db.VarChar(255)
+
+  member_registration MemberRegistration @relation(fields: [registration_id], references: [registration_id], onDelete: Cascade)
+
+  @@map("member_standard_preference_log")
+}
+
+model PersonalizedProgram {
+  personalized_program_id          Int     @id @default(autoincrement())
+  member_id                        Int
+  instructor_id                    Int
+  personalized_program_name        String  @db.VarChar(255)
+  personalized_program_description String? @db.Text
+
+  member                           Member                          @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
+  instructor                       Instructor                      @relation(fields: [instructor_id], references: [instructor_id], onDelete: Cascade)
+  personalized_program_enrollments PersonalizedProgramEnrollment[]
+
+  @@map("personalized_program")
+}
+
+model PersonalizedProgramEnrollment {
+  personalized_program_enrollment_id Int      @id @default(autoincrement())
+  personalized_program_id            Int
+  goals                              String?  @db.Text
+  start_date                         DateTime @db.Date
+  end_date                           DateTime @db.Date
+  deadline                           DateTime @db.Date
+
+  personalized_program              PersonalizedProgram             @relation(fields: [personalized_program_id], references: [personalized_program_id], onDelete: Cascade)
+  member_personalized_programs_logs MemberPersonalizedProgramsLog[]
+
+  @@map("personalized_program_enrollment")
+}
+
+model MemberPersonalizedProgramsLog {
+  member_personalized_programs_log_id Int    @id @default(autoincrement())
+  personalized_program_enrollment_id  Int
+  progress                            String @db.Text
+
+  personalized_program_enrollment PersonalizedProgramEnrollment @relation(fields: [personalized_program_enrollment_id], references: [personalized_program_enrollment_id], onDelete: Cascade)
+
+  @@map("member_personalized_programs_log")
 }

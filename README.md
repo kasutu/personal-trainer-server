@@ -1,4 +1,4 @@
-# silid-server
+# personal-trainer-server
 
 To install dependencies:
 
