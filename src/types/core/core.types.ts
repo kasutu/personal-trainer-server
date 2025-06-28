@@ -1,6 +1,1 @@
-export type {
-  SpaceProvider,
-  Building,
-  Space,
-  SpaceSeeker,
-} from "@prisma/client";
+export type * from "@prisma/client";
