@@ -390,20 +390,37 @@ async function testComplexRelationships() {
     });
     membershipId = membership.id;
 
-    const member = await prisma.member.create({
-      data: {
-        firstName: "Relationship",
-        lastName: "Tester",
-        gender: "Male",
-        dateOfBirth: new Date("1990-01-01"),
-        email: "relationship.tester@example.com",
-        number: "1234567890",
-      },
+    const existingMember = await prisma.member.findUnique({
+      where: { email: "relationship.tester@example.com" },
     });
-    memberId = member.id;
 
-    const instructor = await prisma.instructor.create({
-      data: {
+    if (existingMember) {
+      console.log("Member already exists:", existingMember);
+      memberId = existingMember.id;
+    } else {
+      const member = await prisma.member.create({
+        data: {
+          firstName: "Relationship",
+          lastName: "Tester",
+          gender: "Male",
+          dateOfBirth: new Date("1990-01-01"),
+          email: "relationship.tester@example.com",
+          number: "1234567890",
+        },
+      });
+      memberId = member.id;
+    }
+
+    const instructor = await prisma.instructor.upsert({
+      where: { email: "instructor.tester@example.com" },
+      update: {
+        firstName: "Instructor",
+        lastName: "Tester",
+        gender: "Female",
+        dateOfBirth: new Date("1985-01-01"),
+        number: "0987654321",
+      },
+      create: {
         firstName: "Instructor",
         lastName: "Tester",
         gender: "Female",
@@ -412,6 +429,7 @@ async function testComplexRelationships() {
         number: "0987654321",
       },
     });
+
     instructorId = instructor.id;
 
     logTest("CREATE", "Relationship Setup", true);
@@ -474,6 +492,7 @@ async function testComplexRelationships() {
     const enrollment = await prisma.personalizedProgramEnrollment.create({
       data: {
         personalizedProgramId: personalizedProgram.id,
+        memberId: memberId,
         goals: "Personalized fitness goals",
         startDate: new Date(),
         endDate: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000),
@@ -540,6 +559,11 @@ async function testComplexRelationships() {
   // Cleanup
   try {
     await prisma.member.delete({ where: { id: memberId } });
+
+    await prisma.standardProgram.deleteMany({
+      where: { instructorId: instructorId },
+    });
+
     await prisma.instructor.delete({ where: { id: instructorId } });
     await prisma.membership.delete({ where: { id: membershipId } });
     logTest("DELETE", "Relationship Cleanup", true);

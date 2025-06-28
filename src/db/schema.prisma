@@ -253,8 +253,9 @@ model PersonalizedProgramEnrollment {
 
   // Relations
   personalizedProgram PersonalizedProgram             @relation(fields: [personalizedProgramId], references: [id], onDelete: Cascade)
-  member              Member                          @relation(fields: [personalizedProgramId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "personalized_program_enrollment_member_id_fkey")
   progressLogs        MemberPersonalizedProgressLog[]
+  Member              Member?                         @relation(fields: [memberId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  memberId            Int?
 
   @@index([personalizedProgramId])
   @@index([isActive])
@@ -271,7 +272,8 @@ model MemberPersonalizedProgressLog {
 
   // Relations
   personalizedProgramEnrollment PersonalizedProgramEnrollment @relation(fields: [personalizedProgramEnrollmentId], references: [id], onDelete: Cascade)
-  member                        Member                        @relation(fields: [personalizedProgramEnrollmentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "member_personalized_progress_log_member_id_fkey")
+  Member                        Member?                       @relation(fields: [memberId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  memberId                      Int?
 
   @@index([personalizedProgramEnrollmentId])
   @@index([loggedAt])
