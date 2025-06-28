@@ -1,201 +1,330 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlserver"
   url      = env("DATABASE_URL")
 }
 
-model Membership {
-  membership_id          Int     @id @default(autoincrement())
-  membership_name        String  @db.VarChar(255)
-  membership_description String? @db.Text
+// Enums are not supported in SQL Server with Prisma, so use String fields instead.
+// Remove enum definitions and ensure all model fields use String with @db.VarChar.
 
-  services             Service[]
-  member_subscriptions MemberSubscription[]
-  standard_programs    StandardProgram[]
+model Membership {
+  id          Int      @id @default(autoincrement()) @map("membership_id")
+  name        String   @map("membership_name") @db.VarChar(30)
+  description String   @map("membership_description") @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  services            Service[]
+  memberSubscriptions MemberSubscription[]
+  standardPrograms    StandardProgram[]
 
   @@map("membership")
 }
 
 model Service {
-  service_id           Int    @id @default(autoincrement())
-  membership_id        Int
-  service_name         String @db.VarChar(255)
-  service_availability String @db.VarChar(100)
+  id           Int      @id @default(autoincrement()) @map("service_id")
+  membershipId Int      @map("membership_id")
+  name         String   @map("service_name") @db.VarChar(30)
+  availability String   @map("service_availability") @db.VarChar(20)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
-  membership Membership @relation(fields: [membership_id], references: [membership_id], onDelete: Cascade)
+  // Relations
+  membership Membership @relation(fields: [membershipId], references: [id], onDelete: Cascade)
 
+  @@index([membershipId])
   @@map("service")
 }
 
-model Member {
-  member_id     Int      @id @default(autoincrement())
-  first_name    String   @db.VarChar(100)
-  middle_name   String?  @db.VarChar(100)
-  last_name     String   @db.VarChar(100)
-  gender        String   @db.VarChar(10)
-  date_of_birth DateTime @db.Date
-  email         String   @unique @db.VarChar(255)
-  number        String   @db.VarChar(20)
-
-  member_subscriptions         MemberSubscription[]
-  standard_program_enrollments StandardProgramEnrollment[]
-  personalized_programs        PersonalizedProgram[]
-  member_account_credentials   MemberAccountCredentials?
-
-  @@map("member")
-}
-
 model MemberRegistration {
-  registration_id      Int      @id @default(autoincrement())
-  first_name           String   @db.VarChar(100)
-  middle_name          String?  @db.VarChar(100)
-  last_name            String   @db.VarChar(100)
-  gender               String   @db.VarChar(10)
-  date_of_birth        DateTime @db.Date
-  email                String   @db.VarChar(255)
-  number               String   @db.VarChar(20)
-  date_of_application  DateTime @db.Date
-  service_membership   String   @db.VarChar(255)
-  month_of_application Int
+  id                 Int      @id @default(autoincrement()) @map("registration_id")
+  firstName          String   @map("first_name") @db.VarChar(30)
+  middleName         String?  @map("middle_name") @db.VarChar(30)
+  lastName           String   @map("last_name") @db.VarChar(30)
+  gender             String   @db.VarChar(10)
+  dateOfBirth        DateTime @map("date_of_birth") @db.Date
+  email              String   @unique @db.VarChar(50)
+  number             String   @db.VarChar(15)
+  dateOfApplication  DateTime @map("date_of_application") @db.Date
+  appliedMembership  String   @map("applied_membership") @db.VarChar(30)
+  monthOfApplication String   @map("month_of_application") @db.VarChar(15)
+  status             String   @default("pending") @db.VarChar(20) // pending, approved, rejected
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
 
-  member_standard_preference_logs MemberStandardPreferenceLog[]
-
+  @@index([email])
+  @@index([status])
   @@map("member_registration")
 }
 
-model MemberSubscription {
-  subscription_id     Int      @id @default(autoincrement())
-  member_id           Int
-  membership_id       Int
-  start_date          DateTime @db.Date
-  end_date            DateTime @db.Date
-  subscription_status String   @db.VarChar(50)
+model Member {
+  id          Int      @id @default(autoincrement()) @map("member_id")
+  firstName   String   @map("first_name") @db.VarChar(30)
+  middleName  String?  @map("middle_name") @db.VarChar(30)
+  lastName    String   @map("last_name") @db.VarChar(30)
+  gender      String   @db.VarChar(10)
+  dateOfBirth DateTime @map("date_of_birth") @db.Date
+  email       String   @unique @db.VarChar(50)
+  number      String   @db.VarChar(15)
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
-  member     Member     @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
-  membership Membership @relation(fields: [membership_id], references: [membership_id], onDelete: Cascade)
+  // Relations
+  credentials                    MemberAccountCredentials?
+  subscriptions                  MemberSubscription[]
+  preferenceLogs                 MemberPreferenceLog[]
+  personalizedPrograms           PersonalizedProgram[]
+  standardProgramEnrollments     StandardProgramEnrollment[]
+  personalizedProgramEnrollments PersonalizedProgramEnrollment[]
+  personalizedProgressLogs       MemberPersonalizedProgressLog[]
 
-  @@map("member_subscription")
+  @@index([email])
+  @@index([isActive])
+  @@map("member")
 }
 
 model MemberAccountCredentials {
-  member_account_credentials_id Int    @id @default(autoincrement())
-  member_id                     Int    @unique
-  username                      String @unique @db.VarChar(100)
-  hashed_password               String @db.VarChar(255)
+  id             Int       @id @default(autoincrement()) @map("member_account_credentials_id")
+  memberId       Int       @unique @map("member_id")
+  username       String    @unique @db.VarChar(30)
+  hashedPassword String    @map("hashed_password") @db.VarChar(255)
+  lastLoginAt    DateTime? @map("last_login_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
 
-  member Member @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
+  // Relations
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
 
+  @@index([username])
   @@map("member_account_credentials")
 }
 
+model MemberSubscription {
+  id           Int      @id @default(autoincrement()) @map("subscription_id")
+  memberId     Int      @map("member_id")
+  membershipId Int      @map("membership_id")
+  startDate    DateTime @map("start_date") @db.Date
+  endDate      DateTime @map("end_date") @db.Date
+  status       String   @default("ACTIVE") @map("subscription_status") @db.VarChar(20)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  member     Member     @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  membership Membership @relation(fields: [membershipId], references: [id])
+
+  @@index([memberId])
+  @@index([membershipId])
+  @@index([status])
+  @@map("member_subscription")
+}
+
+model MemberPreferenceLog {
+  id                   Int      @id @default(autoincrement()) @map("member_preference_log_id")
+  memberId             Int      @map("member_id")
+  goals                String   @db.Text
+  recordedAvailability String   @map("recorded_availability") @db.VarChar(20)
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@index([memberId])
+  @@map("member_preference_log")
+}
+
 model Instructor {
-  instructor_id Int      @id @default(autoincrement())
-  first_name    String   @db.VarChar(100)
-  middle_name   String?  @db.VarChar(100)
-  last_name     String   @db.VarChar(100)
-  gender        String   @db.VarChar(10)
-  date_of_birth DateTime @db.Date
-  email         String   @unique @db.VarChar(255)
-  number        String   @db.VarChar(20)
+  id          Int      @id @default(autoincrement()) @map("instructor_id")
+  firstName   String   @map("first_name") @db.VarChar(30)
+  middleName  String?  @map("middle_name") @db.VarChar(30)
+  lastName    String   @map("last_name") @db.VarChar(30)
+  gender      String   @db.VarChar(10)
+  dateOfBirth DateTime @map("date_of_birth") @db.Date
+  email       String   @unique @db.VarChar(50)
+  number      String   @db.VarChar(15)
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
-  standard_programs              StandardProgram[]
-  personalized_programs          PersonalizedProgram[]
-  instructor_account_credentials InstructorAccountCredentials?
+  // Relations
+  credentials          InstructorAccountCredentials?
+  personalizedPrograms PersonalizedProgram[]
+  standardPrograms     StandardProgram[]
 
+  @@index([email])
+  @@index([isActive])
   @@map("instructor")
 }
 
 model InstructorAccountCredentials {
-  instructor_account_credentials_id Int    @id @default(autoincrement())
-  instructor_id                     Int    @unique
-  username                          String @unique @db.VarChar(100)
-  hashed_password                   String @db.VarChar(255)
+  id             Int       @id @default(autoincrement()) @map("instructor_account_credentials_id")
+  instructorId   Int       @unique @map("instructor_id")
+  username       String    @unique @db.VarChar(30)
+  hashedPassword String    @map("hashed_password") @db.VarChar(255)
+  lastLoginAt    DateTime? @map("last_login_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
 
-  instructor Instructor @relation(fields: [instructor_id], references: [instructor_id], onDelete: Cascade)
+  // Relations
+  instructor Instructor @relation(fields: [instructorId], references: [id], onDelete: Cascade)
 
+  @@index([username])
   @@map("instructor_account_credentials")
 }
 
 model StandardProgram {
-  standard_program_id              Int     @id @default(autoincrement())
-  instructor_id                    Int
-  membership_id                    Int
-  personalized_program_name        String  @db.VarChar(255)
-  personalized_program_description String? @db.Text
+  id           Int      @id @default(autoincrement()) @map("standard_program_id")
+  instructorId Int      @map("instructor_id")
+  membershipId Int      @map("membership_id")
+  name         String   @map("standard_program_name") @db.VarChar(50)
+  description  String   @map("standard_program_description") @db.Text
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
-  instructor                   Instructor                  @relation(fields: [instructor_id], references: [instructor_id], onDelete: Cascade)
-  membership                   Membership                  @relation(fields: [membership_id], references: [membership_id], onDelete: Cascade)
-  standard_program_enrollments StandardProgramEnrollment[]
+  // Relations
+  instructor  Instructor                  @relation(fields: [instructorId], references: [id])
+  membership  Membership                  @relation(fields: [membershipId], references: [id])
+  enrollments StandardProgramEnrollment[]
 
+  @@index([instructorId])
+  @@index([membershipId])
+  @@index([isActive])
   @@map("standard_program")
 }
 
 model StandardProgramEnrollment {
-  standard_program_enrollment_id Int      @id @default(autoincrement())
-  member_id                      Int
-  standard_program_id            Int
-  goals                          String?  @db.Text
-  start_date                     DateTime @db.Date
-  sa_date                        DateTime @db.Date
-  end_date                       DateTime @db.Date
+  id                Int      @id @default(autoincrement()) @map("standard_program_enrollment_id")
+  memberId          Int      @map("member_id")
+  standardProgramId Int      @map("standard_program_id")
+  goals             String   @db.Text
+  startDate         DateTime @map("start_date") @db.Date
+  endDate           DateTime @map("end_date") @db.Date
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
-  member           Member          @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
-  standard_program StandardProgram @relation(fields: [standard_program_id], references: [standard_program_id], onDelete: Cascade)
+  // Relations
+  member          Member          @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  standardProgram StandardProgram @relation(fields: [standardProgramId], references: [id], onDelete: Cascade)
 
+  @@index([memberId])
+  @@index([standardProgramId])
+  @@index([isActive])
   @@map("standard_program_enrollment")
 }
 
-model MemberStandardPreferenceLog {
-  member_standard_preference_log_id Int     @id @default(autoincrement())
-  registration_id                   Int
-  goals                             String? @db.Text
-  recorded_availability             String  @db.VarChar(255)
-
-  member_registration MemberRegistration @relation(fields: [registration_id], references: [registration_id], onDelete: Cascade)
-
-  @@map("member_standard_preference_log")
-}
-
 model PersonalizedProgram {
-  personalized_program_id          Int     @id @default(autoincrement())
-  member_id                        Int
-  instructor_id                    Int
-  personalized_program_name        String  @db.VarChar(255)
-  personalized_program_description String? @db.Text
+  id           Int      @id @default(autoincrement()) @map("personalized_program_id")
+  memberId     Int      @map("member_id")
+  instructorId Int      @map("instructor_id")
+  name         String   @map("personalized_program_name") @db.VarChar(40)
+  description  String   @map("personalized_program_description") @db.Text
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
-  member                           Member                          @relation(fields: [member_id], references: [member_id], onDelete: Cascade)
-  instructor                       Instructor                      @relation(fields: [instructor_id], references: [instructor_id], onDelete: Cascade)
-  personalized_program_enrollments PersonalizedProgramEnrollment[]
+  // Relations
+  member      Member                          @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  instructor  Instructor                      @relation(fields: [instructorId], references: [id])
+  enrollments PersonalizedProgramEnrollment[]
 
+  @@index([memberId])
+  @@index([instructorId])
+  @@index([isActive])
   @@map("personalized_program")
 }
 
 model PersonalizedProgramEnrollment {
-  personalized_program_enrollment_id Int      @id @default(autoincrement())
-  personalized_program_id            Int
-  goals                              String?  @db.Text
-  start_date                         DateTime @db.Date
-  end_date                           DateTime @db.Date
-  deadline                           DateTime @db.Date
+  id                    Int      @id @default(autoincrement()) @map("personalized_program_enrollment_id")
+  personalizedProgramId Int      @map("personalized_program_id")
+  goals                 String   @db.Text
+  startDate             DateTime @map("start_date") @db.Date
+  endDate               DateTime @map("end_date") @db.Date
+  isActive              Boolean  @default(true)
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
 
-  personalized_program              PersonalizedProgram             @relation(fields: [personalized_program_id], references: [personalized_program_id], onDelete: Cascade)
-  member_personalized_programs_logs MemberPersonalizedProgramsLog[]
+  // Relations
+  personalizedProgram PersonalizedProgram             @relation(fields: [personalizedProgramId], references: [id], onDelete: Cascade)
+  member              Member                          @relation(fields: [personalizedProgramId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "personalized_program_enrollment_member_id_fkey")
+  progressLogs        MemberPersonalizedProgressLog[]
 
+  @@index([personalizedProgramId])
+  @@index([isActive])
   @@map("personalized_program_enrollment")
 }
 
-model MemberPersonalizedProgramsLog {
-  member_personalized_programs_log_id Int    @id @default(autoincrement())
-  personalized_program_enrollment_id  Int
-  progress                            String @db.Text
+model MemberPersonalizedProgressLog {
+  id                              Int      @id @default(autoincrement()) @map("member_personalized_progress_log_id")
+  personalizedProgramEnrollmentId Int      @map("personalized_program_enrollment_id")
+  progress                        String   @db.Text
+  loggedAt                        DateTime @default(now()) @map("logged_at")
+  createdAt                       DateTime @default(now()) @map("created_at")
+  updatedAt                       DateTime @updatedAt @map("updated_at")
 
-  personalized_program_enrollment PersonalizedProgramEnrollment @relation(fields: [personalized_program_enrollment_id], references: [personalized_program_enrollment_id], onDelete: Cascade)
+  // Relations
+  personalizedProgramEnrollment PersonalizedProgramEnrollment @relation(fields: [personalizedProgramEnrollmentId], references: [id], onDelete: Cascade)
+  member                        Member                        @relation(fields: [personalizedProgramEnrollmentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "member_personalized_progress_log_member_id_fkey")
 
-  @@map("member_personalized_programs_log")
+  @@index([personalizedProgramEnrollmentId])
+  @@index([loggedAt])
+  @@map("member_personalized_progress_log")
+}
+
+model Admin {
+  id         Int      @id @default(autoincrement()) @map("admin_id")
+  firstName  String   @map("first_name") @db.VarChar(30)
+  middleName String?  @map("middle_name") @db.VarChar(30)
+  lastName   String   @map("last_name") @db.VarChar(30)
+  email      String   @unique @db.VarChar(50)
+  role       String   @default("ADMIN") @db.VarChar(20)
+  isActive   Boolean  @default(true) @map("is_active")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  credentials AdminAccountCredentials?
+
+  @@index([email])
+  @@index([role])
+  @@map("admin")
+}
+
+model AdminAccountCredentials {
+  id             Int       @id @default(autoincrement()) @map("admin_account_credentials_id")
+  adminId        Int       @unique @map("admin_id")
+  username       String    @unique @db.VarChar(30)
+  hashedPassword String    @map("hashed_password") @db.VarChar(255)
+  lastLoginAt    DateTime? @map("last_login_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([username])
+  @@map("admin_account_credentials")
+}
+
+model ActivityLog {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  userType    String   @map("user_type") @db.VarChar(20)
+  action      String   @db.VarChar(100)
+  description String?  @db.Text
+  ipAddress   String?  @map("ip_address") @db.VarChar(45)
+  userAgent   String?  @map("user_agent") @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([userId, userType])
+  @@index([action])
+  @@index([createdAt])
+  @@map("activity_log")
 }
