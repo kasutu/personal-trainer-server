@@ -70,5 +70,6 @@ export default class AuthRoute extends Routes {
       `${this.path}/user-role/:userRoleId`,
       asyncHandler(this.controller.removeUserRole)
     );
+    this.router.post(`${this.path}/login`, asyncHandler(this.controller.login));
   }
 }

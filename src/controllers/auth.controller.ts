@@ -9,6 +9,7 @@ import type {
 } from "~/services/auth.service";
 import { createResponseDto } from "~/types/dto/response.dto";
 import { hashPassword } from "~/utils/password";
+import bcrypt from "bcrypt";
 
 export class AuthController {
   public async getUserById(req: Request, res: Response, next: NextFunction) {
@@ -179,6 +180,38 @@ export class AuthController {
         Number(req.params.userRoleId)
       );
       res.status(200).json(createResponseDto(result));
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async login(req: Request, res: Response, next: NextFunction) {
+    const service = Container.get(AuthService);
+    try {
+      const { email, password } = req.body;
+      if (!email || !password) {
+        return res
+          .status(400)
+          .json({ error: "Email and password are required" });
+      }
+      const user = await service.getUserByEmail(email);
+      if (!user) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+      const valid = await bcrypt.compare(password, user.hashedPassword);
+      if (!valid) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+      // Optionally, fetch roles
+      const roles = await service.getUserRoles(user.id);
+      res.status(200).json(
+        createResponseDto({
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          roles: roles.map((r) => r.role.name),
+        })
+      );
     } catch (error) {
       next(error);
     }

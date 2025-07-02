@@ -1,6 +1,40 @@
-Integration Test Report - 2025-07-02T14:39:02.929Z
+Integration Test Report - 2025-07-02T15:05:11.715Z
 Test Environment: http://localhost:3000/api/auth
 
+
+[Create role] POST http://localhost:3000/api/auth/role
+Payload: {"name":"INTEGRATION_ROLE","description":"Integration test role"}
+Response: {"data":{"id":32,"name":"INTEGRATION_ROLE","description":"Integration test role","createdAt":"2025-07-02T15:05:11.718Z","updatedAt":"2025-07-02T15:05:11.718Z"}}
+
+[Get role by ID] GET http://localhost:3000/api/auth/role/32
+Response: {"data":{"id":32,"name":"INTEGRATION_ROLE","description":"Integration test role","createdAt":"2025-07-02T15:05:11.718Z","updatedAt":"2025-07-02T15:05:11.718Z"}}
+
+[Create user] POST http://localhost:3000/api/auth/user
+Payload: {"email":"integrationuser@example.com","username":"integrationuser","password":"integrationpass","lastLoginAt":"2025-07-02T15:05:11.742Z"}
+Response: {"data":{"id":21,"email":"integrationuser@example.com","username":"integrationuser","hashedPassword":"$2b$10$1b3N/8nW7i3KZI0kuiPJYuFziZo34L5tE9NqvPAWT9Re2/1cefLWW","lastLoginAt":"2025-07-02T15:05:11.742Z","createdAt":"2025-07-02T15:05:11.801Z","updatedAt":"2025-07-02T15:05:11.801Z"}}
+
+[Get user by ID] GET http://localhost:3000/api/auth/user/21
+Response: {"data":{"id":21,"email":"integrationuser@example.com","username":"integrationuser","hashedPassword":"$2b$10$1b3N/8nW7i3KZI0kuiPJYuFziZo34L5tE9NqvPAWT9Re2/1cefLWW","lastLoginAt":"2025-07-02T15:05:11.742Z","createdAt":"2025-07-02T15:05:11.801Z","updatedAt":"2025-07-02T15:05:11.801Z"}}
+
+[Login user] POST http://localhost:3000/api/auth/login
+Payload: {"email":"integrationuser@example.com","password":"integrationpass"}
+Response: {"data":{"id":21,"email":"integrationuser@example.com","username":"integrationuser","roles":[]}}
+
+[Assign role to user] POST http://localhost:3000/api/auth/user-role
+Payload: {"userId":21,"roleId":32}
+Response: {"data":{"id":20,"userId":21,"roleId":32,"createdAt":"2025-07-02T15:05:11.893Z","updatedAt":"2025-07-02T15:05:11.893Z"}}
+
+[Get user roles] GET http://localhost:3000/api/auth/user/21/roles
+Response: {"data":[{"id":20,"userId":21,"roleId":32,"createdAt":"2025-07-02T15:05:11.893Z","updatedAt":"2025-07-02T15:05:11.893Z","role":{"id":32,"name":"INTEGRATION_ROLE","description":"Integration test role","createdAt":"2025-07-02T15:05:11.718Z","updatedAt":"2025-07-02T15:05:11.718Z"}}]}
+
+[Remove user role] DELETE http://localhost:3000/api/auth/user-role/20
+Response: {"data":{"id":20,"userId":21,"roleId":32,"createdAt":"2025-07-02T15:05:11.893Z","updatedAt":"2025-07-02T15:05:11.893Z"}}
+
+[Delete user] DELETE http://localhost:3000/api/auth/user/21
+Response: {"data":{"id":21,"email":"integrationuser@example.com","username":"integrationuser","hashedPassword":"$2b$10$1b3N/8nW7i3KZI0kuiPJYuFziZo34L5tE9NqvPAWT9Re2/1cefLWW","lastLoginAt":"2025-07-02T15:05:11.742Z","createdAt":"2025-07-02T15:05:11.801Z","updatedAt":"2025-07-02T15:05:11.801Z"}}
+
+[Delete role] DELETE http://localhost:3000/api/auth/role/32
+Response: {"data":{"id":32,"name":"INTEGRATION_ROLE","description":"Integration test role","createdAt":"2025-07-02T15:05:11.718Z","updatedAt":"2025-07-02T15:05:11.718Z"}}
 
 ================================================================================
 AUTH ENDPOINTS INTEGRATION REPORT
@@ -11,7 +45,7 @@ Create role: ✅
   Expected: 201  Got: 201
 
 Get role by ID: ✅
-  Method: GET  URL: http://localhost:3000/api/auth/role/11
+  Method: GET  URL: http://localhost:3000/api/auth/role/32
   Expected: 200  Got: 200
 
 Create user: ✅
@@ -19,7 +53,11 @@ Create user: ✅
   Expected: 201  Got: 201
 
 Get user by ID: ✅
-  Method: GET  URL: http://localhost:3000/api/auth/user/12
+  Method: GET  URL: http://localhost:3000/api/auth/user/21
+  Expected: 200  Got: 200
+
+Login user: ✅
+  Method: POST  URL: http://localhost:3000/api/auth/login
   Expected: 200  Got: 200
 
 Assign role to user: ✅
@@ -27,23 +65,23 @@ Assign role to user: ✅
   Expected: 201  Got: 201
 
 Get user roles: ✅
-  Method: GET  URL: http://localhost:3000/api/auth/user/12/roles
+  Method: GET  URL: http://localhost:3000/api/auth/user/21/roles
   Expected: 200  Got: 200
 
 Remove user role: ✅
-  Method: DELETE  URL: http://localhost:3000/api/auth/user-role/12
+  Method: DELETE  URL: http://localhost:3000/api/auth/user-role/20
   Expected: 200  Got: 200
 
 Delete user: ✅
-  Method: DELETE  URL: http://localhost:3000/api/auth/user/12
+  Method: DELETE  URL: http://localhost:3000/api/auth/user/21
   Expected: 200  Got: 200
 
 Delete role: ✅
-  Method: DELETE  URL: http://localhost:3000/api/auth/role/11
+  Method: DELETE  URL: http://localhost:3000/api/auth/role/32
   Expected: 200  Got: 200
 
 SUMMARY:
-  Total: 9
-  Success: 9
+  Total: 10
+  Success: 10
   Failed: 0
 ================================================================================

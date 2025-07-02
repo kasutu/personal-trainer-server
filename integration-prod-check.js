@@ -75,12 +75,18 @@ async function runIntegrationTests() {
   const results = [];
 
   // 1. Create Role
+  let payload = { name: TEST_ROLE_NAME, description: TEST_ROLE_DESC };
   let res = await fetch(`${BASE_URL}/role`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name: TEST_ROLE_NAME, description: TEST_ROLE_DESC }),
+    body: JSON.stringify(payload),
   });
   let body = await res.text();
+  logToFile(
+    `\n[Create role] POST ${BASE_URL}/role\nPayload: ${JSON.stringify(
+      payload
+    )}\nResponse: ${body}`
+  );
   let roleId;
   try {
     roleId = JSON.parse(body).data?.id;
@@ -99,6 +105,9 @@ async function runIntegrationTests() {
   // 2. Get Role by ID
   res = await fetch(`${BASE_URL}/role/${roleId}`);
   body = await res.text();
+  logToFile(
+    `\n[Get role by ID] GET ${BASE_URL}/role/${roleId}\nResponse: ${body}`
+  );
   results.push({
     description: "Get role by ID",
     method: "GET",
@@ -110,17 +119,23 @@ async function runIntegrationTests() {
   });
 
   // 3. Create User (send password, not hashedPassword)
+  payload = {
+    email: TEST_USER_EMAIL,
+    username: TEST_USER_USERNAME,
+    password: TEST_USER_PASSWORD,
+    lastLoginAt: new Date().toISOString(),
+  };
   res = await fetch(`${BASE_URL}/user`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      email: TEST_USER_EMAIL,
-      username: TEST_USER_USERNAME,
-      password: TEST_USER_PASSWORD,
-      lastLoginAt: new Date().toISOString(),
-    }),
+    body: JSON.stringify(payload),
   });
   body = await res.text();
+  logToFile(
+    `\n[Create user] POST ${BASE_URL}/user\nPayload: ${JSON.stringify(
+      payload
+    )}\nResponse: ${body}`
+  );
   let userId;
   try {
     userId = JSON.parse(body).data?.id;
@@ -139,6 +154,9 @@ async function runIntegrationTests() {
   // 4. Get User by ID
   res = await fetch(`${BASE_URL}/user/${userId}`);
   body = await res.text();
+  logToFile(
+    `\n[Get user by ID] GET ${BASE_URL}/user/${userId}\nResponse: ${body}`
+  );
   results.push({
     description: "Get user by ID",
     method: "GET",
@@ -149,13 +167,53 @@ async function runIntegrationTests() {
     error: res.status !== 200 ? body : undefined,
   });
 
+  // 4.5. Login as User
+  payload = {
+    email: TEST_USER_EMAIL,
+    password: TEST_USER_PASSWORD,
+  };
+  res = await fetch(`${BASE_URL}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  body = await res.text();
+  logToFile(
+    `\n[Login user] POST ${BASE_URL}/login\nPayload: ${JSON.stringify(
+      payload
+    )}\nResponse: ${body}`
+  );
+  let loginOk = false;
+  try {
+    const loginData = JSON.parse(body);
+    loginOk =
+      res.status === 200 &&
+      loginData.data &&
+      loginData.data.email === TEST_USER_EMAIL;
+  } catch {}
+  results.push({
+    description: "Login user",
+    method: "POST",
+    url: `${BASE_URL}/login`,
+    status: loginOk,
+    code: res.status,
+    expect: 200,
+    error: !loginOk ? body : undefined,
+  });
+
   // 5. Assign Role to User
+  payload = { userId, roleId };
   res = await fetch(`${BASE_URL}/user-role`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userId, roleId }),
+    body: JSON.stringify(payload),
   });
   body = await res.text();
+  logToFile(
+    `\n[Assign role to user] POST ${BASE_URL}/user-role\nPayload: ${JSON.stringify(
+      payload
+    )}\nResponse: ${body}`
+  );
   let userRoleId;
   try {
     userRoleId = JSON.parse(body).data?.id;
@@ -174,6 +232,9 @@ async function runIntegrationTests() {
   // 6. Get User Roles
   res = await fetch(`${BASE_URL}/user/${userId}/roles`);
   body = await res.text();
+  logToFile(
+    `\n[Get user roles] GET ${BASE_URL}/user/${userId}/roles\nResponse: ${body}`
+  );
   results.push({
     description: "Get user roles",
     method: "GET",
@@ -189,6 +250,9 @@ async function runIntegrationTests() {
     method: "DELETE",
   });
   body = await res.text();
+  logToFile(
+    `\n[Remove user role] DELETE ${BASE_URL}/user-role/${userRoleId}\nResponse: ${body}`
+  );
   results.push({
     description: "Remove user role",
     method: "DELETE",
@@ -202,6 +266,9 @@ async function runIntegrationTests() {
   // 8. Delete User
   res = await fetch(`${BASE_URL}/user/${userId}`, { method: "DELETE" });
   body = await res.text();
+  logToFile(
+    `\n[Delete user] DELETE ${BASE_URL}/user/${userId}\nResponse: ${body}`
+  );
   results.push({
     description: "Delete user",
     method: "DELETE",
@@ -215,6 +282,9 @@ async function runIntegrationTests() {
   // 9. Delete Role
   res = await fetch(`${BASE_URL}/role/${roleId}`, { method: "DELETE" });
   body = await res.text();
+  logToFile(
+    `\n[Delete role] DELETE ${BASE_URL}/role/${roleId}\nResponse: ${body}`
+  );
   results.push({
     description: "Delete role",
     method: "DELETE",

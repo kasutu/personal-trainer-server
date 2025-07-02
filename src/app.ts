@@ -3,6 +3,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
+import cors from "cors";
 import { NotFoundMiddleware } from "~/middlewares/404.middleware";
 import { ErrorMiddleware } from "~/middlewares/error.middleware";
 import { InfoMiddleware } from "~/middlewares/info.middleware";
@@ -43,11 +44,8 @@ export class App {
   private initializeMiddlewares() {
     this.app.use(morgan("combined", { stream }));
     this.app.use(helmet());
-    // logger.info(
-    //   `Change the origin to your domain in src/configs.t, currently handles origin: ${corsOptions.origin}`
-    // );
-    // this.app.use(cors(corsOptions));
-    logger.info(`cors disabled`);
+    this.app.use(cors({ origin: "*" }));
+    logger.info("cors enabled for all origins");
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
   }
