@@ -1,175 +1,118 @@
 import { PrismaClient } from "@prisma/client";
+import type {
+  Person as PrismaPerson,
+  Membership as PrismaMembership,
+  Program as PrismaProgram,
+} from "@prisma/client";
 import { faker } from "@faker-js/faker";
-import * as bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
-// Create random membership data
-function createRandomMembershipData() {
-  return {
-    name: faker.helpers.arrayElement([
-      "Basic Membership",
-      "Premium Membership",
-      "VIP Membership",
-      "Student Membership",
-    ]),
-    description: faker.lorem.sentences(2),
-  };
-}
-
-// Create random service data for a membership
-function createRandomServiceData(membershipId: number) {
-  return {
-    membershipId: membershipId,
-    name: faker.helpers.arrayElement([
-      "Personal Training",
-      "Group Classes",
-      "Nutrition Consultation",
-      "Fitness Assessment",
-      "Equipment Access",
-    ]),
-    availability: faker.helpers.arrayElement([
-      "Mon-Fri 6AM-10PM",
-      "24/7 Access",
-      "Weekends Only",
-      "By Appointment",
-    ]),
-  };
-}
-
-// Create random member data
-function createRandomMemberData(credentialsId: number) {
-  const firstName = faker.person.firstName();
-  const lastName = faker.person.lastName();
-  return {
-    memberAccountCredentialsId: credentialsId,
-    firstName: firstName,
-    middleName: faker.helpers.maybe(() => faker.person.middleName(), {
-      probability: 0.3,
-    }),
-    lastName: lastName,
-    gender: faker.helpers.arrayElement(["Male", "Female", "Other"]),
-    dateOfBirth: faker.date.birthdate({ min: 18, max: 70, mode: "age" }),
-    phone: faker.phone.number(),
-    dateOfApplication: faker.date.recent({ days: 30 }),
-    appliedMembership: faker.helpers.arrayElement([
-      "Basic Membership",
-      "Premium Membership",
-      "VIP Membership",
-    ]),
-    monthOfApplication: faker.date
-      .recent({ days: 30 })
-      .toLocaleString("default", { month: "long" }),
-  };
-}
-
-// Create random instructor data
-function createRandomInstructorData() {
-  const firstName = faker.person.firstName();
-  const lastName = faker.person.lastName();
-  return {
-    firstName: firstName,
-    middleName: faker.helpers.maybe(() => faker.person.middleName(), {
-      probability: 0.3,
-    }),
-    lastName: lastName,
-    gender: faker.helpers.arrayElement(["Male", "Female", "Other"]),
-    dateOfBirth: faker.date.birthdate({ min: 22, max: 50, mode: "age" }),
-    email: faker.internet.email({ firstName, lastName }),
-    number: faker.phone.number(),
-  };
-}
-
-// Seed memberships and their services
+// --- Seed Memberships and Services ---
 async function seedMemberships() {
   const memberships = [];
-
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 3; i++) {
     const membership = await prisma.membership.create({
-      data: createRandomMembershipData(),
+      data: {
+        name: faker.helpers.arrayElement([
+          "Basic Membership",
+          "Premium Membership",
+          "VIP Membership",
+        ]),
+        description: faker.lorem.sentences(2),
+      },
     });
-
-    // Create 2-4 services for each membership
-    const serviceCount = faker.number.int({ min: 2, max: 4 });
+    // Create 2-3 services for each membership
+    const serviceCount = faker.number.int({ min: 2, max: 3 });
     for (let j = 0; j < serviceCount; j++) {
       await prisma.service.create({
-        data: createRandomServiceData(membership.id),
+        data: {
+          membershipId: membership.id,
+          name: faker.helpers.arrayElement([
+            "Personal Training",
+            "Group Classes",
+            "Nutrition Consultation",
+            "Fitness Assessment",
+            "Equipment Access",
+          ]),
+          availability: faker.helpers.arrayElement([
+            "Mon-Fri 6AM-10PM",
+            "24/7 Access",
+            "Weekends Only",
+            "By Appointment",
+          ]),
+        },
       });
     }
-
     memberships.push(membership);
   }
-
   return memberships;
 }
 
-// Seed instructors with account credentials
-async function seedInstructors() {
-  const instructors = [];
-
-  for (let i = 0; i < 5; i++) {
-    const instructorData = createRandomInstructorData();
-    const instructor = await prisma.instructor.create({
-      data: instructorData,
-    });
-
-    // Create account credentials for each instructor
-    const hashedPassword = await bcrypt.hash("password123", 10);
-    await prisma.instructorAccountCredentials.create({
+// --- Seed Persons ---
+async function seedPersons(users: { id: number }[]): Promise<PrismaPerson[]> {
+  const persons: PrismaPerson[] = [];
+  for (let i = 0; i < users.length; i++) {
+    const firstName = faker.person.firstName();
+    const lastName = faker.person.lastName();
+    const person = await prisma.person.create({
       data: {
-        instructorId: instructor.id,
-        username: faker.internet.userName({
-          firstName: instructorData.firstName,
-          lastName: instructorData.lastName,
+        userId: users[i].id,
+        firstName,
+        middleName: faker.helpers.maybe(() => faker.person.middleName(), {
+          probability: 0.3,
         }),
-        hashedPassword: hashedPassword,
+        lastName,
+        gender: faker.helpers.arrayElement(["Male", "Female", "Other"]),
+        dateOfBirth: faker.date.birthdate({ min: 18, max: 70, mode: "age" }),
+        phone: faker.phone.number(),
+        personalEmail: faker.internet.email({ firstName, lastName }),
+        dateOfApplication: faker.date.recent({ days: 30 }),
+        appliedMembership: faker.helpers.arrayElement([
+          "Basic Membership",
+          "Premium Membership",
+          "VIP Membership",
+        ]),
+        monthOfApplication: faker.date
+          .recent({ days: 30 })
+          .toLocaleString("default", { month: "long" }),
       },
     });
-
-    instructors.push(instructor);
+    persons.push(person);
   }
-
-  return instructors;
+  return persons;
 }
 
-// Seed members with account credentials and subscriptions
-async function seedMembers(memberships: any[]) {
-  const members = [];
-
-  for (let i = 0; i < 15; i++) {
-    // Create account credentials for each member first
-    const hashedPassword = await bcrypt.hash("password123", 10);
-    const credentials = await prisma.memberAccountCredentials.create({
-      data: {
-        email: faker.internet.email(),
-        hashedPassword: hashedPassword,
-      },
-    });
-
-    // Now create the member and link credentials
-    const memberData = createRandomMemberData(credentials.id);
-    const member = await prisma.member.create({
-      data: memberData,
-    });
-
-    // Create a subscription for each member
-    const randomMembership = faker.helpers.arrayElement(memberships);
-    const startDate = faker.date.recent({ days: 90 });
+// --- Seed MemberSubscriptions ---
+async function seedMemberSubscriptions(
+  persons: PrismaPerson[],
+  memberships: PrismaMembership[]
+): Promise<void> {
+  for (const person of persons) {
+    const membership = faker.helpers.arrayElement(memberships);
     await prisma.memberSubscription.create({
       data: {
-        memberId: member.id,
-        membershipId: randomMembership.id,
-        startDate: startDate,
-        endDate: new Date(startDate.getTime() + 365 * 24 * 60 * 60 * 1000), // 1 year later
-        status: faker.helpers.arrayElement(["ACTIVE", "EXPIRED", "SUSPENDED"]),
+        personId: person.id,
+        membershipId: membership.id,
+        startDate: faker.date.recent({ days: 90 }),
+        endDate: faker.date.soon({ days: 365 }),
+        status: faker.helpers.arrayElement([
+          "ACTIVE",
+          "EXPIRED",
+          "SUSPENDED",
+        ]) as "ACTIVE" | "EXPIRED" | "SUSPENDED",
       },
     });
+  }
+}
 
-    // Create standard preference log for some members
+// --- Seed MemberStandardPreferenceLog ---
+async function seedPreferenceLogs(persons: PrismaPerson[]): Promise<void> {
+  for (const person of persons) {
     if (faker.datatype.boolean()) {
       await prisma.memberStandardPreferenceLog.create({
         data: {
-          memberId: member.id,
+          personId: person.id,
           goals: faker.lorem.sentences(2),
           recordedAvailability: faker.helpers.arrayElement([
             "Morning 6AM-9AM",
@@ -180,26 +123,22 @@ async function seedMembers(memberships: any[]) {
         },
       });
     }
-
-    members.push(member);
   }
-
-  return members;
 }
 
-// Seed standard programs and enrollments
-async function seedStandardPrograms(
-  instructors: any[],
-  memberships: any[],
-  members: any[]
-) {
-  const programs = [];
-
-  for (let i = 0; i < 6; i++) {
-    const program = await prisma.standardProgram.create({
+// --- Seed Programs ---
+async function seedPrograms(
+  persons: PrismaPerson[],
+  memberships: PrismaMembership[]
+): Promise<PrismaProgram[]> {
+  const programs: PrismaProgram[] = [];
+  for (let i = 0; i < 5; i++) {
+    const creator = faker.helpers.arrayElement(persons);
+    const membership = faker.helpers.arrayElement(memberships);
+    const program = await prisma.program.create({
       data: {
-        instructorId: faker.helpers.arrayElement(instructors).id,
-        membershipId: faker.helpers.arrayElement(memberships).id,
+        creatorId: creator.id,
+        membershipId: membership.id,
         name: faker.helpers.arrayElement([
           "Weight Loss Program",
           "Muscle Building Program",
@@ -208,213 +147,103 @@ async function seedStandardPrograms(
           "Flexibility Program",
         ]),
         description: faker.lorem.sentences(3),
+        type: faker.helpers.arrayElement(["STANDARD", "PERSONALIZED"]) as
+          | "STANDARD"
+          | "PERSONALIZED",
+        isActive: true,
       },
     });
-
-    // Create 2-5 enrollments for each program
-    const enrollmentCount = faker.number.int({ min: 2, max: 5 });
-    for (let j = 0; j < enrollmentCount; j++) {
-      const startDate = faker.date.recent({ days: 60 });
-      await prisma.standardProgramEnrollment.create({
-        data: {
-          memberId: faker.helpers.arrayElement(members).id,
-          standardProgramId: program.id,
-          goals: faker.lorem.sentences(1),
-          startDate: startDate,
-          endDate: new Date(startDate.getTime() + 90 * 24 * 60 * 60 * 1000), // 3 months later
-        },
-      });
-    }
-
     programs.push(program);
   }
-
   return programs;
 }
 
-// Seed personalized programs and enrollments with progress logs
-async function seedPersonalizedPrograms(instructors: any[], members: any[]) {
-  const programs = [];
-
-  for (let i = 0; i < 8; i++) {
-    const member = faker.helpers.arrayElement(members);
-    const instructor = faker.helpers.arrayElement(instructors);
-    const program = await prisma.personalizedProgram.create({
+// --- Seed Enrollments and ProgressLogs ---
+async function seedEnrollmentsAndProgress(
+  persons: PrismaPerson[],
+  programs: PrismaProgram[]
+): Promise<void> {
+  for (const person of persons) {
+    const program = faker.helpers.arrayElement(programs);
+    const enrollment = await prisma.enrollment.create({
       data: {
-        memberId: member.id,
-        instructorId: instructor.id,
-        name: `Personalized ${faker.helpers.arrayElement([
-          "Weight Loss",
-          "Muscle Building",
-          "Endurance",
-          "Rehabilitation",
-        ])} Program`,
-        description: faker.lorem.sentences(3),
+        personId: person.id,
+        programId: program.id,
+        goals: faker.lorem.sentence(),
+        startDate: faker.date.recent({ days: 60 }),
+        endDate: faker.date.soon({ days: 90 }),
+        isActive: true,
       },
     });
-
-    // Create enrollment for the personalized program
-    const startDate = faker.date.recent({ days: 30 });
-    const enrollment = await prisma.personalizedProgramEnrollment.create({
-      data: {
-        memberId: member.id,
-        personalizedProgramId: program.id,
-        goals: faker.lorem.sentences(2),
-        startDate: startDate,
-        endDate: new Date(startDate.getTime() + 120 * 24 * 60 * 60 * 1000), // 4 months later
-      },
-    });
-
-    // Create 2-4 progress logs for each enrollment
-    const logCount = faker.number.int({ min: 2, max: 4 });
-    for (let j = 0; j < logCount; j++) {
-      await prisma.memberPersonalizedProgressLog.create({
+    // Add 1-2 progress logs
+    const logCount = faker.number.int({ min: 1, max: 2 });
+    for (let i = 0; i < logCount; i++) {
+      await prisma.progressLog.create({
         data: {
-          memberId: member.id,
-          personalizedProgramEnrollmentId: enrollment.id,
+          personId: person.id,
+          enrollmentId: enrollment.id,
           progress: faker.lorem.sentences(2),
         },
       });
     }
-
-    programs.push(program);
   }
-
-  return programs;
 }
 
-// Seed admin users
-async function seedAdmins() {
-  const admins = [];
-
-  for (let i = 0; i < 3; i++) {
-    const firstName = faker.person.firstName();
-    const lastName = faker.person.lastName();
-
-    const admin = await prisma.admin.create({
-      data: {
-        firstName: firstName,
-        lastName: lastName,
-        email: faker.internet.email({ firstName, lastName }),
-        role: faker.helpers.arrayElement(["SUPER_ADMIN", "ADMIN", "MANAGER"]),
-      },
-    });
-
-    // Create admin credentials
-    const hashedPassword = await bcrypt.hash("adminpass123", 10);
-    await prisma.adminAccountCredentials.create({
-      data: {
-        adminId: admin.id,
-        username: faker.internet.userName({ firstName, lastName }),
-        hashedPassword: hashedPassword,
-      },
-    });
-
-    admins.push(admin);
-  }
-
-  return admins;
-}
-
-// Seed activity logs
-async function seedActivityLogs(
-  members: any[],
-  instructors: any[],
-  admins: any[]
-) {
-  const actions = ["LOGIN", "LOGOUT", "CREATE", "UPDATE", "DELETE", "VIEW"];
-
-  for (let i = 0; i < 50; i++) {
-    const userType = faker.helpers.arrayElement([
-      "MEMBER",
-      "INSTRUCTOR",
-      "ADMIN",
-    ]);
-    let userId;
-
-    switch (userType) {
-      case "MEMBER":
-        userId = faker.helpers.arrayElement(members).id;
-        break;
-      case "INSTRUCTOR":
-        userId = faker.helpers.arrayElement(instructors).id;
-        break;
-      case "ADMIN":
-        userId = faker.helpers.arrayElement(admins).id;
-        break;
-    }
-
+// --- Seed ActivityLogs ---
+async function seedActivityLogs(persons: PrismaPerson[]): Promise<void> {
+  for (let i = 0; i < 20; i++) {
+    const person = faker.helpers.arrayElement(persons);
     await prisma.activityLog.create({
       data: {
-        userId: userId!,
-        userType: userType,
-        action: faker.helpers.arrayElement(actions),
+        personId: person.id,
+        activityType: faker.helpers.arrayElement([
+          "WORKOUT",
+          "CHECKIN",
+          "PROGRAM_START",
+        ]) as "WORKOUT" | "CHECKIN" | "PROGRAM_START",
+        activityName: faker.lorem.words(3),
         description: faker.lorem.sentence(),
-        ipAddress: faker.internet.ip(),
-        userAgent: faker.internet.userAgent(),
+        duration: faker.number.int({ min: 30, max: 120 }),
+        calories: faker.number.int({ min: 100, max: 800 }),
+        notes: faker.lorem.sentence(),
+        recordedAt: faker.date.recent(),
       },
     });
   }
 }
+
+// --- Main Seeder ---
+import { seedAuth } from "./seed.auth";
 
 async function main() {
   // Clean the database first using a transaction for safety
   await prisma.$transaction([
     prisma.activityLog.deleteMany({}),
-    prisma.memberPersonalizedProgressLog.deleteMany({}),
-    prisma.personalizedProgramEnrollment.deleteMany({}),
-    prisma.personalizedProgram.deleteMany({}),
-    prisma.standardProgramEnrollment.deleteMany({}),
-    prisma.standardProgram.deleteMany({}),
+    prisma.progressLog.deleteMany({}),
+    prisma.enrollment.deleteMany({}),
+    prisma.program.deleteMany({}),
     prisma.memberStandardPreferenceLog.deleteMany({}),
     prisma.memberSubscription.deleteMany({}),
-    prisma.memberAccountCredentials.deleteMany({}),
-    prisma.member.deleteMany({}),
-    prisma.instructorAccountCredentials.deleteMany({}),
-    prisma.instructor.deleteMany({}),
-    prisma.adminAccountCredentials.deleteMany({}),
-    prisma.admin.deleteMany({}),
+    prisma.person.deleteMany({}),
     prisma.service.deleteMany({}),
     prisma.membership.deleteMany({}),
+    prisma.userRole.deleteMany({}),
+    prisma.user.deleteMany({}),
+    prisma.role.deleteMany({}),
   ]);
-
   console.log("🧹 Database cleaned");
 
-  // Seed data in dependency order
+  // --- Auth Seeder ---
+  const { users, roles } = await seedAuth();
+
+  // --- Business Seeder ---
   const memberships = await seedMemberships();
-  console.log(`✅ Created ${memberships.length} memberships with services`);
-
-  const instructors = await seedInstructors();
-  console.log(`✅ Created ${instructors.length} instructors with credentials`);
-
-  const members = await seedMembers(memberships);
-  console.log(
-    `✅ Created ${members.length} members with credentials and subscriptions`
-  );
-
-  const standardPrograms = await seedStandardPrograms(
-    instructors,
-    memberships,
-    members
-  );
-  console.log(
-    `✅ Created ${standardPrograms.length} standard programs with enrollments`
-  );
-
-  const personalizedPrograms = await seedPersonalizedPrograms(
-    instructors,
-    members
-  );
-  console.log(
-    `✅ Created ${personalizedPrograms.length} personalized programs with enrollments and progress logs`
-  );
-
-  const admins = await seedAdmins();
-  console.log(`✅ Created ${admins.length} admin users with credentials`);
-
-  await seedActivityLogs(members, instructors, admins);
-  console.log("✅ Created activity logs");
-
+  const persons = await seedPersons(users);
+  await seedMemberSubscriptions(persons, memberships);
+  await seedPreferenceLogs(persons);
+  const programs = await seedPrograms(persons, memberships);
+  await seedEnrollmentsAndProgress(persons, programs);
+  await seedActivityLogs(persons);
   console.log("🎉 Database seeding completed successfully!");
 }
 

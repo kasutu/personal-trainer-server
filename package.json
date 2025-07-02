@@ -11,6 +11,8 @@
     "db:migrate": "bunx prisma migrate dev",
     "db:studio": "bunx prisma studio",
     "db:seed": "bunx prisma db seed",
+    "db:seed-auth-prod": "bun ./src/db/seed.auth.prod.ts",
+    "db:seed-auth": "bun ./src/db/seed.auth.ts",
     "db:seed-test": "bun ./src/db/db-test.ts",
     "db:reset": "bunx prisma migrate reset --force",
     "db:nuke": "bun ./src/db/nuke.ts",

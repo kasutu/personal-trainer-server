@@ -1,7 +1,7 @@
 import request from "supertest";
 import express from "express";
 import { CredentialsController } from "../credentials.controller";
-import { CredentialsService } from "../../services/credentials.service";
+import { CredentialsService } from "../../services/auth.service";
 import { createResponseDto } from "../../types/dto/response.dto";
 import Container from "typedi";
 

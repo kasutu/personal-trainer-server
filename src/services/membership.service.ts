@@ -10,14 +10,14 @@ export type MembershipWithServices = Prisma.MembershipGetPayload<{
 export type MembershipWithRelations = Prisma.MembershipGetPayload<{
   include: {
     services: true;
-    memberSubscriptions: {
+    subscriptions: {
       include: {
-        member: true;
+        person: true;
       };
     };
-    standardPrograms: {
+    programs: {
       include: {
-        instructor: true;
+        creator: true;
       };
     };
   };
@@ -58,14 +58,14 @@ export class MembershipService {
       where: { id },
       include: {
         services: true,
-        memberSubscriptions: {
+        subscriptions: {
           include: {
-            member: true,
+            person: true,
           },
         },
-        standardPrograms: {
+        programs: {
           include: {
-            instructor: true,
+            creator: true,
           },
         },
       },
@@ -218,7 +218,7 @@ export class MembershipService {
         }),
 
         // Get program statistics
-        prisma.standardProgram.count({
+        prisma.program.count({
           where: {
             membershipId: id,
             isActive: true,

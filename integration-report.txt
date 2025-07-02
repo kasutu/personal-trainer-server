@@ -1,7 +1,23 @@
-Integration Test Report - 2025-07-02T11:04:43.019Z
+Integration Test Report - 2025-07-02T11:57:25.433Z
+Test Environment: http://localhost:3000/api/v1/credentials
+Test Data: Member ID 1000, Instructor ID 1001, Admin ID 1002
 
 
-[2025-07-02T11:04:43.102Z] [POST] http://localhost:3000/api/v1/credentials/member
+DIAGNOSTIC REPORT
+==================================================
+❌ Instructors API: Endpoint not found (404)
+❌ Admins API: Endpoint not found (404)
+✅ Credentials API: Working
+==================================================
+❌ Failed to create member: 404 - {"status":404,"message":"Resource not found. Why was the server cold? It left its Windows open!","path":"/api/v1/members","method":"POST"}
+❌ Failed to create instructor: 404 - {"status":404,"message":"Resource not found. Why do programmers prefer dark mode? Because light attracts bugs!","path":"/api/v1/instructors","method":"POST"}
+❌ Failed to create admin: 404 - {"status":404,"message":"Resource not found. Why was the developer always broke? Because he used up all his cache!","path":"/api/v1/admins","method":"POST"}
+WARNING: Instructor creation failed - instructor tests will be skipped
+WARNING: Admin creation failed - admin tests will be skipped
+
+[2025-07-02T11:57:25.490Z] [POST] http://localhost:3000/api/v1/credentials/member
+Description: Create member credentials
+Category: MEMBER
 Request Headers: {
   Content-Type: application/json
 }
@@ -16,8 +32,8 @@ Response Headers: {
   "content-type": "application/json; charset=utf-8",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
-  "etag": "W/\"e9-/9fKw4TJ4jOrf/+RfLQ6kqJfMdM\"",
+  "date": "Wed, 02 Jul 2025 11:57:24 GMT",
+  "etag": "W/\"e9-Cph3w3tI7+p+0jYpyxPVYmnXado\"",
   "origin-agent-cluster": "?1",
   "referrer-policy": "no-referrer",
   "x-content-type-options": "nosniff",
@@ -30,19 +46,21 @@ Response Headers: {
 Response Body:
 {
   "data": {
-    "id": 20,
+    "id": 12,
     "email": "integration1000@example.com",
-    "hashedPassword": "$2b$10$j4f1I7LFEGFGBUBJqKvy6uPBLD07Hch9YNnEMLwkTYAxDBHgFy0LS",
+    "hashedPassword": "$2b$10$SSttC/YfDURMQAS/Dri9q.PvMpztshde426iy1lZwnR1EK6jtP2km",
     "lastLoginAt": null,
-    "createdAt": "2025-07-02T11:04:43.168Z",
-    "updatedAt": "2025-07-02T11:04:43.168Z"
+    "createdAt": "2025-07-02T11:57:25.550Z",
+    "updatedAt": "2025-07-02T11:57:25.550Z"
   }
 }
-Result: SUCCESS
-Expectation: 201 (PASS)
+Result: SUCCESS ✅
+Expectation: 201 (PASS ✅)
 ================================================================================
 
-[2025-07-02T11:04:43.194Z] [GET] http://localhost:3000/api/v1/credentials/member/20
+[2025-07-02T11:57:25.568Z] [GET] http://localhost:3000/api/v1/credentials/member/12
+Description: Get member credentials by ID
+Category: MEMBER
 Request Headers: {
   Content-Type: application/json
 }
@@ -53,8 +71,8 @@ Response Headers: {
   "content-type": "application/json; charset=utf-8",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
-  "etag": "W/\"e9-/9fKw4TJ4jOrf/+RfLQ6kqJfMdM\"",
+  "date": "Wed, 02 Jul 2025 11:57:24 GMT",
+  "etag": "W/\"e9-Cph3w3tI7+p+0jYpyxPVYmnXado\"",
   "origin-agent-cluster": "?1",
   "referrer-policy": "no-referrer",
   "x-content-type-options": "nosniff",
@@ -67,19 +85,21 @@ Response Headers: {
 Response Body:
 {
   "data": {
-    "id": 20,
+    "id": 12,
     "email": "integration1000@example.com",
-    "hashedPassword": "$2b$10$j4f1I7LFEGFGBUBJqKvy6uPBLD07Hch9YNnEMLwkTYAxDBHgFy0LS",
+    "hashedPassword": "$2b$10$SSttC/YfDURMQAS/Dri9q.PvMpztshde426iy1lZwnR1EK6jtP2km",
     "lastLoginAt": null,
-    "createdAt": "2025-07-02T11:04:43.168Z",
-    "updatedAt": "2025-07-02T11:04:43.168Z"
+    "createdAt": "2025-07-02T11:57:25.550Z",
+    "updatedAt": "2025-07-02T11:57:25.550Z"
   }
 }
-Result: SUCCESS
-Expectation: 200 (PASS)
+Result: SUCCESS ✅
+Expectation: 200 (PASS ✅)
 ================================================================================
 
-[2025-07-02T11:04:43.208Z] [PUT] http://localhost:3000/api/v1/credentials/member/20
+[2025-07-02T11:57:25.575Z] [PUT] http://localhost:3000/api/v1/credentials/member/12
+Description: Update member credentials
+Category: MEMBER
 Request Headers: {
   Content-Type: application/json
 }
@@ -94,8 +114,8 @@ Response Headers: {
   "content-type": "application/json; charset=utf-8",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
-  "etag": "W/\"e9-EB/7J3EJIrHLM7rUgsqWwa0WrQ0\"",
+  "date": "Wed, 02 Jul 2025 11:57:24 GMT",
+  "etag": "W/\"e9-HV8wbymFL6mLhBfyj5VDDru2c5g\"",
   "origin-agent-cluster": "?1",
   "referrer-policy": "no-referrer",
   "x-content-type-options": "nosniff",
@@ -108,19 +128,21 @@ Response Headers: {
 Response Body:
 {
   "data": {
-    "id": 20,
+    "id": 12,
     "email": "integration1000@example.com",
-    "hashedPassword": "$2b$10$Ao7nBi9SSL2tVys1KFyTxu/XPnneIrNbqlfY.wEjPKC0uhIlT8.Gq",
+    "hashedPassword": "$2b$10$FKdB66WMj7gWb/TVEepOsOrZ6Hx1R1j9dcBuFirSmj/BO9L7LQ4ie",
     "lastLoginAt": null,
-    "createdAt": "2025-07-02T11:04:43.168Z",
-    "updatedAt": "2025-07-02T11:04:43.274Z"
+    "createdAt": "2025-07-02T11:57:25.550Z",
+    "updatedAt": "2025-07-02T11:57:25.634Z"
   }
 }
-Result: SUCCESS
-Expectation: 200 (PASS)
+Result: SUCCESS ✅
+Expectation: 200 (PASS ✅)
 ================================================================================
 
-[2025-07-02T11:04:43.299Z] [GET] http://localhost:3000/api/v1/credentials/member/20
+[2025-07-02T11:57:25.652Z] [GET] http://localhost:3000/api/v1/credentials/member/12
+Description: Verify member credentials update
+Category: MEMBER
 Request Headers: {
   Content-Type: application/json
 }
@@ -131,8 +153,8 @@ Response Headers: {
   "content-type": "application/json; charset=utf-8",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
-  "etag": "W/\"e9-EB/7J3EJIrHLM7rUgsqWwa0WrQ0\"",
+  "date": "Wed, 02 Jul 2025 11:57:24 GMT",
+  "etag": "W/\"e9-HV8wbymFL6mLhBfyj5VDDru2c5g\"",
   "origin-agent-cluster": "?1",
   "referrer-policy": "no-referrer",
   "x-content-type-options": "nosniff",
@@ -145,19 +167,21 @@ Response Headers: {
 Response Body:
 {
   "data": {
-    "id": 20,
+    "id": 12,
     "email": "integration1000@example.com",
-    "hashedPassword": "$2b$10$Ao7nBi9SSL2tVys1KFyTxu/XPnneIrNbqlfY.wEjPKC0uhIlT8.Gq",
+    "hashedPassword": "$2b$10$FKdB66WMj7gWb/TVEepOsOrZ6Hx1R1j9dcBuFirSmj/BO9L7LQ4ie",
     "lastLoginAt": null,
-    "createdAt": "2025-07-02T11:04:43.168Z",
-    "updatedAt": "2025-07-02T11:04:43.274Z"
+    "createdAt": "2025-07-02T11:57:25.550Z",
+    "updatedAt": "2025-07-02T11:57:25.634Z"
   }
 }
-Result: SUCCESS
-Expectation: 200 (PASS)
+Result: SUCCESS ✅
+Expectation: 200 (PASS ✅)
 ================================================================================
 
-[2025-07-02T11:04:43.308Z] [DELETE] http://localhost:3000/api/v1/credentials/member/20
+[2025-07-02T11:57:25.659Z] [DELETE] http://localhost:3000/api/v1/credentials/member/12
+Description: Delete member credentials
+Category: MEMBER
 Request Headers: {
   Content-Type: application/json
 }
@@ -168,8 +192,8 @@ Response Headers: {
   "content-type": "application/json; charset=utf-8",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
-  "etag": "W/\"e9-EB/7J3EJIrHLM7rUgsqWwa0WrQ0\"",
+  "date": "Wed, 02 Jul 2025 11:57:24 GMT",
+  "etag": "W/\"e9-HV8wbymFL6mLhBfyj5VDDru2c5g\"",
   "origin-agent-cluster": "?1",
   "referrer-policy": "no-referrer",
   "x-content-type-options": "nosniff",
@@ -182,19 +206,21 @@ Response Headers: {
 Response Body:
 {
   "data": {
-    "id": 20,
+    "id": 12,
     "email": "integration1000@example.com",
-    "hashedPassword": "$2b$10$Ao7nBi9SSL2tVys1KFyTxu/XPnneIrNbqlfY.wEjPKC0uhIlT8.Gq",
+    "hashedPassword": "$2b$10$FKdB66WMj7gWb/TVEepOsOrZ6Hx1R1j9dcBuFirSmj/BO9L7LQ4ie",
     "lastLoginAt": null,
-    "createdAt": "2025-07-02T11:04:43.168Z",
-    "updatedAt": "2025-07-02T11:04:43.274Z"
+    "createdAt": "2025-07-02T11:57:25.550Z",
+    "updatedAt": "2025-07-02T11:57:25.634Z"
   }
 }
-Result: SUCCESS
-Expectation: 200 (PASS)
+Result: SUCCESS ✅
+Expectation: 200 (PASS ✅)
 ================================================================================
 
-[2025-07-02T11:04:43.329Z] [GET] http://localhost:3000/api/v1/credentials/member/20
+[2025-07-02T11:57:25.680Z] [GET] http://localhost:3000/api/v1/credentials/member/12
+Description: Verify member credentials deletion
+Category: MEMBER
 Request Headers: {
   Content-Type: application/json
 }
@@ -205,7 +231,7 @@ Response Headers: {
   "content-type": "application/json; charset=utf-8",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
+  "date": "Wed, 02 Jul 2025 11:57:24 GMT",
   "etag": "W/\"d-XXcxLjB/sjfS0AB6+CxvXcLGrm4\"",
   "origin-agent-cluster": "?1",
   "referrer-policy": "no-referrer",
@@ -220,121 +246,81 @@ Response Body:
 {
   "data": null
 }
-Result: SUCCESS
-Expectation: 200 (PASS)
+Result: SUCCESS ✅
+Expectation: 200 (PASS ✅)
 ================================================================================
 
-[2025-07-02T11:04:43.337Z] [POST] http://localhost:3000/api/v1/credentials/instructor
-Request Headers: {
-  Content-Type: application/json
-}
-Request Body: {
-  "username": "testuser1000",
-  "password": "testpass"
-}
-Status: 500
-Response Headers: {
-  "content-length": "3307",
-  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
-  "content-type": "application/json; charset=utf-8",
-  "cross-origin-opener-policy": "same-origin",
-  "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
-  "etag": "W/\"ceb-8dwlMAhcihvmbmN6BzE+fvAWweI\"",
-  "origin-agent-cluster": "?1",
-  "referrer-policy": "no-referrer",
-  "x-content-type-options": "nosniff",
-  "x-dns-prefetch-control": "off",
-  "x-download-options": "noopen",
-  "x-frame-options": "SAMEORIGIN",
-  "x-permitted-cross-domain-policies": "none",
-  "x-xss-protection": "0"
-}
-Response Body:
-{
-  "message": "\nInvalid `prisma.instructorAccountCredentials.create()` invocation:\n\n{\n  data: {\n    username: \"testuser1000\",\n    hashedPassword: \"$2b$10$XJUoB4RwTtZe6lo32q15OOwscv7BD7hHdnZdyzKHATAoJqyyKyIja\",\n    instructor: {\n      connect: {\n        id: undefined,\n?       email?: String,\n?       AND?: InstructorWhereInput | InstructorWhereInput[],\n?       OR?: InstructorWhereInput[],\n?       NOT?: InstructorWhereInput | InstructorWhereInput[],\n?       firstName?: StringFilter | String,\n?       middleName?: StringNullableFilter | String | Null,\n?       lastName?: StringFilter | String,\n?       gender?: StringFilter | String,\n?       dateOfBirth?: DateTimeFilter | DateTime,\n?       number?: StringFilter | String,\n?       isActive?: BoolFilter | Boolean,\n?       createdAt?: DateTimeFilter | DateTime,\n?       updatedAt?: DateTimeFilter | DateTime,\n?       credentials?: InstructorAccountCredentialsNullableScalarRelationFilter | InstructorAccountCredentialsWhereInput | Null,\n?       personalizedPrograms?: PersonalizedProgramListRelationFilter,\n?       standardPrograms?: StandardProgramListRelationFilter\n      }\n    }\n  }\n}\n\nArgument `connect` of type InstructorWhereUniqueInput needs at least one of `id` or `email` arguments. Available options are marked with ?.",
-  "stack": "PrismaClientValidationError: \nInvalid `prisma.instructorAccountCredentials.create()` invocation:\n\n{\n  data: {\n    username: \"testuser1000\",\n    hashedPassword: \"$2b$10$XJUoB4RwTtZe6lo32q15OOwscv7BD7hHdnZdyzKHATAoJqyyKyIja\",\n    instructor: {\n      connect: {\n        id: undefined,\n?       email?: String,\n?       AND?: InstructorWhereInput | InstructorWhereInput[],\n?       OR?: InstructorWhereInput[],\n?       NOT?: InstructorWhereInput | InstructorWhereInput[],\n?       firstName?: StringFilter | String,\n?       middleName?: StringNullableFilter | String | Null,\n?       lastName?: StringFilter | String,\n?       gender?: StringFilter | String,\n?       dateOfBirth?: DateTimeFilter | DateTime,\n?       number?: StringFilter | String,\n?       isActive?: BoolFilter | Boolean,\n?       createdAt?: DateTimeFilter | DateTime,\n?       updatedAt?: DateTimeFilter | DateTime,\n?       credentials?: InstructorAccountCredentialsNullableScalarRelationFilter | InstructorAccountCredentialsWhereInput | Null,\n?       personalizedPrograms?: PersonalizedProgramListRelationFilter,\n?       standardPrograms?: StandardProgramListRelationFilter\n      }\n    }\n  }\n}\n\nArgument `connect` of type InstructorWhereUniqueInput needs at least one of `id` or `email` arguments. Available options are marked with ?.\n    at new PrismaClientValidationError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:2580)\n    at Pn (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:29:1367)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7090)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
-}
-Result: FAIL
-Expectation: 201 (FAIL)
+[SKIPPED] POST /instructor - Create instructor credentials
+Reason: Dependency not created
 ================================================================================
 
-[2025-07-02T11:04:43.416Z] [GET] http://localhost:3000/api/v1/credentials/instructor/undefined
+[2025-07-02T11:57:25.691Z] [GET] http://localhost:3000/api/v1/credentials/instructor/undefined
+Description: Get instructor credentials by ID
+Category: INSTRUCTOR
 SKIPPED: Dependent ID was not set due to previous failure.
 ================================================================================
 
-[2025-07-02T11:04:43.417Z] [PUT] http://localhost:3000/api/v1/credentials/instructor/undefined
+[2025-07-02T11:57:25.691Z] [PUT] http://localhost:3000/api/v1/credentials/instructor/undefined
+Description: Update instructor credentials
+Category: INSTRUCTOR
 SKIPPED: Dependent ID was not set due to previous failure.
 ================================================================================
 
-[2025-07-02T11:04:43.418Z] [GET] http://localhost:3000/api/v1/credentials/instructor/undefined
+[2025-07-02T11:57:25.691Z] [GET] http://localhost:3000/api/v1/credentials/instructor/undefined
+Description: Verify instructor credentials update
+Category: INSTRUCTOR
 SKIPPED: Dependent ID was not set due to previous failure.
 ================================================================================
 
-[2025-07-02T11:04:43.418Z] [DELETE] http://localhost:3000/api/v1/credentials/instructor/undefined
+[2025-07-02T11:57:25.692Z] [DELETE] http://localhost:3000/api/v1/credentials/instructor/undefined
+Description: Delete instructor credentials
+Category: INSTRUCTOR
 SKIPPED: Dependent ID was not set due to previous failure.
 ================================================================================
 
-[2025-07-02T11:04:43.419Z] [GET] http://localhost:3000/api/v1/credentials/instructor/undefined
+[2025-07-02T11:57:25.692Z] [GET] http://localhost:3000/api/v1/credentials/instructor/undefined
+Description: Verify instructor credentials deletion
+Category: INSTRUCTOR
 SKIPPED: Dependent ID was not set due to previous failure.
 ================================================================================
 
-[2025-07-02T11:04:43.419Z] [POST] http://localhost:3000/api/v1/credentials/admin
-Request Headers: {
-  Content-Type: application/json
-}
-Request Body: {
-  "username": "testadmin1000",
-  "password": "testpass"
-}
-Status: 500
-Response Headers: {
-  "content-length": "2755",
-  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
-  "content-type": "application/json; charset=utf-8",
-  "cross-origin-opener-policy": "same-origin",
-  "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
-  "etag": "W/\"ac3-6tZv58Sd2KDZxiCJyJjzksD6wts\"",
-  "origin-agent-cluster": "?1",
-  "referrer-policy": "no-referrer",
-  "x-content-type-options": "nosniff",
-  "x-dns-prefetch-control": "off",
-  "x-download-options": "noopen",
-  "x-frame-options": "SAMEORIGIN",
-  "x-permitted-cross-domain-policies": "none",
-  "x-xss-protection": "0"
-}
-Response Body:
-{
-  "message": "\nInvalid `prisma.adminAccountCredentials.create()` invocation:\n\n{\n  data: {\n    username: \"testadmin1000\",\n    hashedPassword: \"$2b$10$MK4quugIacZhEkUPRL6mHeCPfdnJvOC/Uk7UAISwWePHdWLtqp79.\",\n    admin: {\n      connect: {\n        id: undefined,\n?       email?: String,\n?       AND?: AdminWhereInput | AdminWhereInput[],\n?       OR?: AdminWhereInput[],\n?       NOT?: AdminWhereInput | AdminWhereInput[],\n?       firstName?: StringFilter | String,\n?       middleName?: StringNullableFilter | String | Null,\n?       lastName?: StringFilter | String,\n?       role?: StringFilter | String,\n?       isActive?: BoolFilter | Boolean,\n?       createdAt?: DateTimeFilter | DateTime,\n?       updatedAt?: DateTimeFilter | DateTime,\n?       credentials?: AdminAccountCredentialsNullableScalarRelationFilter | AdminAccountCredentialsWhereInput | Null\n      }\n    }\n  }\n}\n\nArgument `connect` of type AdminWhereUniqueInput needs at least one of `id` or `email` arguments. Available options are marked with ?.",
-  "stack": "PrismaClientValidationError: \nInvalid `prisma.adminAccountCredentials.create()` invocation:\n\n{\n  data: {\n    username: \"testadmin1000\",\n    hashedPassword: \"$2b$10$MK4quugIacZhEkUPRL6mHeCPfdnJvOC/Uk7UAISwWePHdWLtqp79.\",\n    admin: {\n      connect: {\n        id: undefined,\n?       email?: String,\n?       AND?: AdminWhereInput | AdminWhereInput[],\n?       OR?: AdminWhereInput[],\n?       NOT?: AdminWhereInput | AdminWhereInput[],\n?       firstName?: StringFilter | String,\n?       middleName?: StringNullableFilter | String | Null,\n?       lastName?: StringFilter | String,\n?       role?: StringFilter | String,\n?       isActive?: BoolFilter | Boolean,\n?       createdAt?: DateTimeFilter | DateTime,\n?       updatedAt?: DateTimeFilter | DateTime,\n?       credentials?: AdminAccountCredentialsNullableScalarRelationFilter | AdminAccountCredentialsWhereInput | Null\n      }\n    }\n  }\n}\n\nArgument `connect` of type AdminWhereUniqueInput needs at least one of `id` or `email` arguments. Available options are marked with ?.\n    at new PrismaClientValidationError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:2580)\n    at Pn (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:29:1367)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7090)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
-}
-Result: FAIL
-Expectation: 201 (FAIL)
+[SKIPPED] POST /admin - Create admin credentials
+Reason: Dependency not created
 ================================================================================
 
-[2025-07-02T11:04:43.483Z] [GET] http://localhost:3000/api/v1/credentials/admin/undefined
+[2025-07-02T11:57:25.693Z] [GET] http://localhost:3000/api/v1/credentials/admin/undefined
+Description: Get admin credentials by ID
+Category: ADMIN
 SKIPPED: Dependent ID was not set due to previous failure.
 ================================================================================
 
-[2025-07-02T11:04:43.484Z] [PUT] http://localhost:3000/api/v1/credentials/admin/undefined
+[2025-07-02T11:57:25.693Z] [PUT] http://localhost:3000/api/v1/credentials/admin/undefined
+Description: Update admin credentials
+Category: ADMIN
 SKIPPED: Dependent ID was not set due to previous failure.
 ================================================================================
 
-[2025-07-02T11:04:43.485Z] [GET] http://localhost:3000/api/v1/credentials/admin/undefined
+[2025-07-02T11:57:25.693Z] [GET] http://localhost:3000/api/v1/credentials/admin/undefined
+Description: Verify admin credentials update
+Category: ADMIN
 SKIPPED: Dependent ID was not set due to previous failure.
 ================================================================================
 
-[2025-07-02T11:04:43.485Z] [DELETE] http://localhost:3000/api/v1/credentials/admin/undefined
+[2025-07-02T11:57:25.693Z] [DELETE] http://localhost:3000/api/v1/credentials/admin/undefined
+Description: Delete admin credentials
+Category: ADMIN
 SKIPPED: Dependent ID was not set due to previous failure.
 ================================================================================
 
-[2025-07-02T11:04:43.486Z] [GET] http://localhost:3000/api/v1/credentials/admin/undefined
+[2025-07-02T11:57:25.694Z] [GET] http://localhost:3000/api/v1/credentials/admin/undefined
+Description: Verify admin credentials deletion
+Category: ADMIN
 SKIPPED: Dependent ID was not set due to previous failure.
 ================================================================================
 
-[2025-07-02T11:04:43.487Z] [GET] http://localhost:3000/api/v1/credentials/member/email-available?email=integration1000@example.com
+[2025-07-02T11:57:25.694Z] [GET] http://localhost:3000/api/v1/credentials/member/email-available?email=integration1000@example.com
+Description: Check member email availability
+Category: UTILITY
 Request Headers: {
   Content-Type: application/json
 }
@@ -345,7 +331,7 @@ Response Headers: {
   "content-type": "application/json; charset=utf-8",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
+  "date": "Wed, 02 Jul 2025 11:57:24 GMT",
   "etag": "W/\"3d5-ynOWOrgXpcb+LMJaeF4iCG+By5Q\"",
   "origin-agent-cluster": "?1",
   "referrer-policy": "no-referrer",
@@ -361,10 +347,12 @@ Response Body:
   "message": "\nInvalid `prisma.memberAccountCredentials.findUnique()` invocation:\n\n{\n  where: {\n+   id: Int\n  }\n}\n\nArgument `id` is missing.",
   "stack": "PrismaClientValidationError: \nInvalid `prisma.memberAccountCredentials.findUnique()` invocation:\n\n{\n  where: {\n+   id: Int\n  }\n}\n\nArgument `id` is missing.\n    at new PrismaClientValidationError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:2580)\n    at Pn (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:29:1367)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7090)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
 }
-Result: FAIL
+Result: FAIL ❌
 ================================================================================
 
-[2025-07-02T11:04:43.495Z] [GET] http://localhost:3000/api/v1/credentials/instructor/username-available?username=testuser1000
+[2025-07-02T11:57:25.708Z] [GET] http://localhost:3000/api/v1/credentials/instructor/username-available?username=testuser1001
+Description: Check instructor username availability
+Category: UTILITY
 Request Headers: {
   Content-Type: application/json
 }
@@ -375,7 +363,7 @@ Response Headers: {
   "content-type": "application/json; charset=utf-8",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
+  "date": "Wed, 02 Jul 2025 11:57:24 GMT",
   "etag": "W/\"3dd-9RrOXNl6vLhU54oxNrHmcSk+Jhw\"",
   "origin-agent-cluster": "?1",
   "referrer-policy": "no-referrer",
@@ -391,10 +379,12 @@ Response Body:
   "message": "\nInvalid `prisma.instructorAccountCredentials.findUnique()` invocation:\n\n{\n  where: {\n+   id: Int\n  }\n}\n\nArgument `id` is missing.",
   "stack": "PrismaClientValidationError: \nInvalid `prisma.instructorAccountCredentials.findUnique()` invocation:\n\n{\n  where: {\n+   id: Int\n  }\n}\n\nArgument `id` is missing.\n    at new PrismaClientValidationError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:2580)\n    at Pn (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:29:1367)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7090)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
 }
-Result: FAIL
+Result: FAIL ❌
 ================================================================================
 
-[2025-07-02T11:04:43.503Z] [GET] http://localhost:3000/api/v1/credentials/admin/username-available?username=testadmin1000
+[2025-07-02T11:57:25.714Z] [GET] http://localhost:3000/api/v1/credentials/admin/username-available?username=testadmin1002
+Description: Check admin username availability
+Category: UTILITY
 Request Headers: {
   Content-Type: application/json
 }
@@ -405,7 +395,7 @@ Response Headers: {
   "content-type": "application/json; charset=utf-8",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
+  "date": "Wed, 02 Jul 2025 11:57:24 GMT",
   "etag": "W/\"3d3-gq1AtH83I/cyMzH3FkJH0ogPPaw\"",
   "origin-agent-cluster": "?1",
   "referrer-policy": "no-referrer",
@@ -421,10 +411,12 @@ Response Body:
   "message": "\nInvalid `prisma.adminAccountCredentials.findUnique()` invocation:\n\n{\n  where: {\n+   id: Int\n  }\n}\n\nArgument `id` is missing.",
   "stack": "PrismaClientValidationError: \nInvalid `prisma.adminAccountCredentials.findUnique()` invocation:\n\n{\n  where: {\n+   id: Int\n  }\n}\n\nArgument `id` is missing.\n    at new PrismaClientValidationError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:2580)\n    at Pn (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:29:1367)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7090)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
 }
-Result: FAIL
+Result: FAIL ❌
 ================================================================================
 
-[2025-07-02T11:04:43.511Z] [GET] http://localhost:3000/api/v1/credentials/username-available?username=testuser1000
+[2025-07-02T11:57:25.721Z] [GET] http://localhost:3000/api/v1/credentials/username-available?username=testuser1001
+Description: Check global username availability
+Category: UTILITY
 Request Headers: {
   Content-Type: application/json
 }
@@ -435,7 +427,7 @@ Response Headers: {
   "content-type": "application/json; charset=utf-8",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
+  "date": "Wed, 02 Jul 2025 11:57:24 GMT",
   "etag": "W/\"1b-0d79I2YxB9ZRuC3c4X6jYxYknJk\"",
   "origin-agent-cluster": "?1",
   "referrer-policy": "no-referrer",
@@ -452,10 +444,12 @@ Response Body:
     "available": true
   }
 }
-Result: SUCCESS
+Result: SUCCESS ✅
 ================================================================================
 
-[2025-07-02T11:04:43.551Z] [GET] http://localhost:3000/api/v1/credentials/find-by-username?username=testuser1000
+[2025-07-02T11:57:25.754Z] [GET] http://localhost:3000/api/v1/credentials/find-by-username?username=testuser1001
+Description: Find credentials by username
+Category: UTILITY
 Request Headers: {
   Content-Type: application/json
 }
@@ -466,7 +460,7 @@ Response Headers: {
   "content-type": "application/json; charset=utf-8",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
+  "date": "Wed, 02 Jul 2025 11:57:24 GMT",
   "etag": "W/\"29-Dcn0u+ESLassA1QRXufOgpTWvxo\"",
   "origin-agent-cluster": "?1",
   "referrer-policy": "no-referrer",
@@ -484,22 +478,24 @@ Response Body:
     "credentials": null
   }
 }
-Result: SUCCESS
+Result: SUCCESS ✅
 ================================================================================
 
-[2025-07-02T11:04:43.569Z] [GET] http://localhost:3000/api/v1/credentials/stats
+[2025-07-02T11:57:25.767Z] [GET] http://localhost:3000/api/v1/credentials/stats
+Description: Get credentials statistics
+Category: UTILITY
 Request Headers: {
   Content-Type: application/json
 }
 Status: 200
 Response Headers: {
-  "content-length": "83",
+  "content-length": "81",
   "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
   "content-type": "application/json; charset=utf-8",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
-  "etag": "W/\"53-LrNBln+KvtbZWv+Oj3ZPCmC8BuI\"",
+  "date": "Wed, 02 Jul 2025 11:57:24 GMT",
+  "etag": "W/\"51-HhHMaz0Cb8wJ4+vmIzLWXs5Yz58\"",
   "origin-agent-cluster": "?1",
   "referrer-policy": "no-referrer",
   "x-content-type-options": "nosniff",
@@ -512,18 +508,20 @@ Response Headers: {
 Response Body:
 {
   "data": {
-    "totalCredentials": 23,
+    "totalCredentials": 0,
     "byType": {
-      "members": 15,
-      "instructors": 5,
-      "admins": 3
+      "members": 0,
+      "instructors": 0,
+      "admins": 0
     }
   }
 }
-Result: SUCCESS
+Result: SUCCESS ✅
 ================================================================================
 
-[2025-07-02T11:04:43.598Z] [GET] http://localhost:3000/api/v1/credentials/recent-logins
+[2025-07-02T11:57:25.783Z] [GET] http://localhost:3000/api/v1/credentials/recent-logins
+Description: Get recent login activity
+Category: UTILITY
 Request Headers: {
   Content-Type: application/json
 }
@@ -534,7 +532,7 @@ Response Headers: {
   "content-type": "application/json; charset=utf-8",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
-  "date": "Wed, 02 Jul 2025 11:04:43 GMT",
+  "date": "Wed, 02 Jul 2025 11:57:24 GMT",
   "etag": "W/\"b-EFAlOux7Kcr/ZEgGkn2r+oFAbu4\"",
   "origin-agent-cluster": "?1",
   "referrer-policy": "no-referrer",
@@ -549,11 +547,52 @@ Response Body:
 {
   "data": []
 }
-Result: SUCCESS
+Result: SUCCESS ✅
 ================================================================================
 
-Integration test run complete.
-Success: 10
-Fail/Error: 15
-Total: 25
+================================================================================
+COVERAGE REPORT
+================================================================================
 
+MEMBER ENDPOINTS:
+  Total: 6
+  Success: 6 (100.0%)
+  Failed: 0 (0.0%)
+  Skipped: 0 (0.0%)
+  Status: 🟢 EXCELLENT
+
+INSTRUCTOR ENDPOINTS:
+  Total: 6
+  Success: 0 (0.0%)
+  Failed: 0 (0.0%)
+  Skipped: 6 (100.0%)
+  Status: 🔴 CRITICAL
+
+ADMIN ENDPOINTS:
+  Total: 6
+  Success: 0 (0.0%)
+  Failed: 0 (0.0%)
+  Skipped: 6 (100.0%)
+  Status: 🔴 CRITICAL
+
+UTILITY ENDPOINTS:
+  Total: 7
+  Success: 4 (57.1%)
+  Failed: 3 (42.9%)
+  Skipped: 0 (0.0%)
+  Status: 🟠 NEEDS ATTENTION
+
+OVERALL SUMMARY:
+  Total Endpoints: 25
+  Success: 10 (40.0%)
+  Failed: 3 (12.0%)
+  Skipped: 12 (48.0%)
+  Health Status: 🔴 SYSTEM DOWN
+
+RECOMMENDATIONS:
+  • 12 endpoints were skipped due to missing dependencies
+  • Check instructor/admin creation endpoints: /api/v1/instructors and /api/v1/admins
+  • 3 endpoints failed and need immediate attention
+  • CRITICAL: Apply the service patch to fix availability check methods
+  • Priority fix: instructor, admin, utility endpoints
+================================================================================

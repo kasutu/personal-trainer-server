@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import Container from "typedi";
-import { CredentialsService } from "~/services/credentials.service";
+import { CredentialsService } from "~/services/auth.service";
 import { createResponseDto } from "~/types/dto/response.dto";
 import { hashPassword } from "~/utils/password";
 
@@ -333,11 +333,8 @@ export class CredentialsController {
   ) {
     const service = Container.get(CredentialsService);
     try {
-      const { email, excludeMemberId } = req.query;
-      const result = await service.isMemberEmailAvailable(
-        String(email),
-        excludeMemberId ? Number(excludeMemberId) : undefined
-      );
+      const { email } = req.query;
+      const result = await service.isMemberEmailAvailable(String(email));
       res.status(200).json(createResponseDto({ available: result }));
     } catch (error) {
       next(error);
@@ -351,10 +348,9 @@ export class CredentialsController {
   ) {
     const service = Container.get(CredentialsService);
     try {
-      const { username, excludeInstructorId } = req.query;
+      const { username } = req.query;
       const result = await service.isInstructorUsernameAvailable(
-        String(username),
-        excludeInstructorId ? Number(excludeInstructorId) : undefined
+        String(username)
       );
       res.status(200).json(createResponseDto({ available: result }));
     } catch (error) {
