@@ -13,6 +13,7 @@
     "db:seed": "bunx prisma db seed",
     "db:seed-test": "bun ./src/db/db-test.ts",
     "db:reset": "bunx prisma migrate reset --force",
+    "db:nuke": "bun ./src/db/nuke.ts",
     "db:push": "bunx prisma db push"
   },
   "devDependencies": {

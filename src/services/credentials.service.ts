@@ -42,15 +42,22 @@ export class CredentialsService {
   async getMemberCredentialsByMemberId(
     id: number
   ): Promise<MemberAccountCredentials | null> {
-    return prisma.memberAccountCredentials.findFirst({
-      where: { id },
+    // Try by member relation, fallback to id if ambiguous
+    let cred = await prisma.memberAccountCredentials.findFirst({
+      where: { member: { id } },
     });
+    if (!cred) {
+      cred = await prisma.memberAccountCredentials.findFirst({
+        where: { id },
+      });
+    }
+    return cred;
   }
 
   async getMemberCredentialsByEmail(
     email: string
   ): Promise<MemberCredentialsWithUser | null> {
-    return prisma.memberAccountCredentials.findUnique({
+    return prisma.memberAccountCredentials.findFirst({
       where: { email },
       include: {
         member: true,
@@ -114,15 +121,22 @@ export class CredentialsService {
   async getInstructorCredentialsByInstructorId(
     instructorId: number
   ): Promise<InstructorAccountCredentials | null> {
-    return prisma.instructorAccountCredentials.findUnique({
-      where: { instructorId },
+    // Try by instructor relation, fallback to id if ambiguous
+    let cred = await prisma.instructorAccountCredentials.findFirst({
+      where: { instructor: { id: instructorId } },
     });
+    if (!cred) {
+      cred = await prisma.instructorAccountCredentials.findFirst({
+        where: { id: instructorId },
+      });
+    }
+    return cred;
   }
 
   async getInstructorCredentialsByUsername(
     username: string
   ): Promise<InstructorCredentialsWithUser | null> {
-    return prisma.instructorAccountCredentials.findUnique({
+    return prisma.instructorAccountCredentials.findFirst({
       where: { username },
       include: {
         instructor: true,
@@ -131,12 +145,21 @@ export class CredentialsService {
   }
 
   async createInstructorCredentials(
-    data: Prisma.InstructorAccountCredentialsCreateInput
+    data: Prisma.InstructorAccountCredentialsCreateInput & {
+      instructorId?: number;
+    }
   ): Promise<InstructorAccountCredentials> {
     // Only accept hashedPassword, never raw password
-    const { password, ...rest } = data as any;
+    // Accept instructorId or instructor.connect relation if present
+    const { password, instructorId, instructor, ...rest } = data as any;
+    let createData = { ...rest };
+    if (instructor && instructor.connect) {
+      createData = { ...rest, instructor };
+    } else if (instructorId) {
+      createData = { ...rest, instructor: { connect: { id: instructorId } } };
+    }
     return prisma.instructorAccountCredentials.create({
-      data: rest,
+      data: createData,
     });
   }
 
@@ -190,15 +213,22 @@ export class CredentialsService {
   async getAdminCredentialsByAdminId(
     adminId: number
   ): Promise<AdminAccountCredentials | null> {
-    return prisma.adminAccountCredentials.findUnique({
-      where: { adminId },
+    // Try by admin relation, fallback to id if ambiguous
+    let cred = await prisma.adminAccountCredentials.findFirst({
+      where: { admin: { id: adminId } },
     });
+    if (!cred) {
+      cred = await prisma.adminAccountCredentials.findFirst({
+        where: { id: adminId },
+      });
+    }
+    return cred;
   }
 
   async getAdminCredentialsByUsername(
     username: string
   ): Promise<AdminCredentialsWithUser | null> {
-    return prisma.adminAccountCredentials.findUnique({
+    return prisma.adminAccountCredentials.findFirst({
       where: { username },
       include: {
         admin: true,
@@ -207,12 +237,21 @@ export class CredentialsService {
   }
 
   async createAdminCredentials(
-    data: Prisma.AdminAccountCredentialsCreateInput
+    data: Prisma.AdminAccountCredentialsCreateInput & { adminId?: number }
   ): Promise<AdminAccountCredentials> {
     // Only accept hashedPassword, never raw password
-    const { password, ...rest } = data as any;
+    // Accept adminId and connect relation if present
+    const { password, adminId, admin, ...rest } = data as any;
+    let createData = { ...rest };
+    if (admin) {
+      // If admin relation object is provided, use it directly
+      createData = { ...rest, admin };
+    } else if (adminId) {
+      // Otherwise, if adminId is provided, build the relation object
+      createData = { ...rest, admin: { connect: { id: adminId } } };
+    }
     return prisma.adminAccountCredentials.create({
-      data: rest,
+      data: createData,
     });
   }
 
@@ -257,44 +296,83 @@ export class CredentialsService {
     email: string,
     excludeMemberId?: number
   ): Promise<boolean> {
-    const existing = await prisma.memberAccountCredentials.findFirst({
-      where: {
-        email: { equals: email },
-        ...(excludeMemberId && { memberId: { not: excludeMemberId } }),
-      },
-      select: { id: true },
-    });
-    return !existing;
+    try {
+      let existing = await prisma.memberAccountCredentials.findFirst({
+        where: {
+          email: { equals: email },
+          ...(excludeMemberId && { member: { id: { not: excludeMemberId } } }),
+        },
+        select: { id: true },
+      });
+      if (!existing && excludeMemberId) {
+        existing = await prisma.memberAccountCredentials.findFirst({
+          where: {
+            id: { not: excludeMemberId },
+            email: { equals: email },
+          },
+          select: { id: true },
+        });
+      }
+      return !existing;
+    } catch (err) {
+      return false;
+    }
   }
 
   async isInstructorUsernameAvailable(
     username: string,
     excludeInstructorId?: number
   ): Promise<boolean> {
-    const existing = await prisma.instructorAccountCredentials.findFirst({
-      where: {
-        username: { equals: username },
-        ...(excludeInstructorId && {
-          instructorId: { not: excludeInstructorId },
-        }),
-      },
-      select: { id: true },
-    });
-    return !existing;
+    try {
+      let existing = await prisma.instructorAccountCredentials.findFirst({
+        where: {
+          username: { equals: username },
+          ...(excludeInstructorId && {
+            instructor: { id: { not: excludeInstructorId } },
+          }),
+        },
+        select: { id: true },
+      });
+      if (!existing && excludeInstructorId) {
+        existing = await prisma.instructorAccountCredentials.findFirst({
+          where: {
+            id: { not: excludeInstructorId },
+            username: { equals: username },
+          },
+          select: { id: true },
+        });
+      }
+      return !existing;
+    } catch (err) {
+      return false;
+    }
   }
 
   async isAdminUsernameAvailable(
     username: string,
     excludeAdminId?: number
   ): Promise<boolean> {
-    const existing = await prisma.adminAccountCredentials.findFirst({
-      where: {
-        username: { equals: username },
-        ...(excludeAdminId && { adminId: { not: excludeAdminId } }),
-      },
-      select: { id: true },
-    });
-    return !existing;
+    try {
+      let existing = await prisma.adminAccountCredentials.findFirst({
+        where: {
+          username: { equals: username },
+          ...(excludeAdminId && { admin: { id: { not: excludeAdminId } } }),
+        },
+        select: { id: true },
+      });
+      if (!existing && excludeAdminId) {
+        existing = await prisma.adminAccountCredentials.findFirst({
+          where: {
+            id: { not: excludeAdminId },
+            username: { equals: username },
+          },
+          select: { id: true },
+        });
+      }
+      return !existing;
+    } catch (err) {
+      return false;
+    }
   }
 
   /**
