@@ -2,6 +2,24 @@ import { Service } from "typedi";
 import { prisma } from "~/drivers/prisma";
 import type { User, Role, UserRole } from "@prisma/client";
 
+// DTOs for payloads
+export type CreateUserPayload = {
+  email: string;
+  username?: string;
+  hashedPassword: string;
+  lastLoginAt?: Date;
+};
+export type UpdateUserPayload = Partial<
+  Omit<CreateUserPayload, "email" | "hashedPassword">
+> & {
+  hashedPassword?: string;
+};
+export type CreateRolePayload = {
+  name: string;
+  description?: string;
+};
+export type UpdateRolePayload = Partial<CreateRolePayload>;
+
 @Service()
 export class AuthService {
   // USER CRUD
@@ -13,13 +31,11 @@ export class AuthService {
     return prisma.user.findUnique({ where: { email } });
   }
 
-  async createUser(
-    data: Omit<User, "id" | "createdAt" | "updatedAt">
-  ): Promise<User> {
+  async createUser(data: CreateUserPayload): Promise<User> {
     return prisma.user.create({ data });
   }
 
-  async updateUser(id: number, data: Partial<User>): Promise<User> {
+  async updateUser(id: number, data: UpdateUserPayload): Promise<User> {
     return prisma.user.update({ where: { id }, data });
   }
 
@@ -36,13 +52,11 @@ export class AuthService {
     return prisma.role.findUnique({ where: { name } });
   }
 
-  async createRole(
-    data: Omit<Role, "id" | "createdAt" | "updatedAt">
-  ): Promise<Role> {
+  async createRole(data: CreateRolePayload): Promise<Role> {
     return prisma.role.create({ data });
   }
 
-  async updateRole(id: number, data: Partial<Role>): Promise<Role> {
+  async updateRole(id: number, data: UpdateRolePayload): Promise<Role> {
     return prisma.role.update({ where: { id }, data });
   }
 

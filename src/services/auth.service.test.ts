@@ -1,5 +1,11 @@
 import { describe, it, beforeAll, afterAll, expect } from "bun:test";
 import { AuthService } from "../services/auth.service";
+import type {
+  CreateUserPayload,
+  CreateRolePayload,
+  UpdateUserPayload,
+  UpdateRolePayload,
+} from "../services/auth.service";
 import { prisma } from "../drivers/prisma";
 
 let authService: AuthService;
@@ -7,14 +13,14 @@ let userId: number;
 let roleId: number;
 let userRoleId: number;
 
-const testUser = {
+const testUser: CreateUserPayload = {
   email: "testuser@example.com",
   username: "testuser",
   hashedPassword: "hashedpassword",
   lastLoginAt: new Date(),
 };
 
-const testRole = {
+const testRole: CreateRolePayload = {
   name: "TEST_ROLE",
   description: "A test role",
 };
@@ -56,7 +62,8 @@ describe("AuthService", () => {
   });
 
   it("should update a user", async () => {
-    const updated = await authService.updateUser(userId, { username: "updateduser" });
+    const updatePayload: UpdateUserPayload = { username: "updateduser" };
+    const updated = await authService.updateUser(userId, updatePayload);
     expect(updated.username).toBe("updateduser");
   });
 
@@ -80,7 +87,8 @@ describe("AuthService", () => {
   });
 
   it("should update a role", async () => {
-    const updated = await authService.updateRole(roleId, { description: "Updated desc" });
+    const updatePayload: UpdateRolePayload = { description: "Updated desc" };
+    const updated = await authService.updateRole(roleId, updatePayload);
     expect(updated.description).toBe("Updated desc");
   });
 
