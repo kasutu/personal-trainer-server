@@ -61,8 +61,10 @@ export class CredentialsService {
   async createMemberCredentials(
     data: Prisma.MemberAccountCredentialsCreateInput
   ): Promise<MemberAccountCredentials> {
+    // Only accept hashedPassword, never raw password
+    const { password, ...rest } = data as any;
     return prisma.memberAccountCredentials.create({
-      data,
+      data: rest,
     });
   }
 
@@ -70,9 +72,11 @@ export class CredentialsService {
     id: number,
     data: Prisma.MemberAccountCredentialsUpdateInput
   ): Promise<MemberAccountCredentials> {
+    // Only accept hashedPassword, never raw password
+    const { password, ...rest } = data as any;
     return prisma.memberAccountCredentials.update({
       where: { id },
-      data,
+      data: rest,
     });
   }
 
@@ -129,8 +133,10 @@ export class CredentialsService {
   async createInstructorCredentials(
     data: Prisma.InstructorAccountCredentialsCreateInput
   ): Promise<InstructorAccountCredentials> {
+    // Only accept hashedPassword, never raw password
+    const { password, ...rest } = data as any;
     return prisma.instructorAccountCredentials.create({
-      data,
+      data: rest,
     });
   }
 
@@ -138,9 +144,11 @@ export class CredentialsService {
     id: number,
     data: Prisma.InstructorAccountCredentialsUpdateInput
   ): Promise<InstructorAccountCredentials> {
+    // Only accept hashedPassword, never raw password
+    const { password, ...rest } = data as any;
     return prisma.instructorAccountCredentials.update({
       where: { id },
-      data,
+      data: rest,
     });
   }
 
@@ -201,8 +209,10 @@ export class CredentialsService {
   async createAdminCredentials(
     data: Prisma.AdminAccountCredentialsCreateInput
   ): Promise<AdminAccountCredentials> {
+    // Only accept hashedPassword, never raw password
+    const { password, ...rest } = data as any;
     return prisma.adminAccountCredentials.create({
-      data,
+      data: rest,
     });
   }
 
@@ -210,9 +220,11 @@ export class CredentialsService {
     id: number,
     data: Prisma.AdminAccountCredentialsUpdateInput
   ): Promise<AdminAccountCredentials> {
+    // Only accept hashedPassword, never raw password
+    const { password, ...rest } = data as any;
     return prisma.adminAccountCredentials.update({
       where: { id },
-      data,
+      data: rest,
     });
   }
 

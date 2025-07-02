@@ -1,0 +1,787 @@
+Integration Test Report - 2025-07-02T10:10:06.147Z
+
+
+[2025-07-02T10:10:06.147Z] [GET] http://localhost:3000/api/v1/credentials/member/1
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 200
+Response Headers: {
+  "content-length": "13",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:05 GMT",
+  "etag": "W/\"d-XXcxLjB/sjfS0AB6+CxvXcLGrm4\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "data": null
+}
+Result: SUCCESS
+================================================================================
+
+[2025-07-02T10:10:06.312Z] [GET] http://localhost:3000/api/v1/credentials/member/by-member/1
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 200
+Response Headers: {
+  "content-length": "13",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:05 GMT",
+  "etag": "W/\"d-XXcxLjB/sjfS0AB6+CxvXcLGrm4\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "data": null
+}
+Result: SUCCESS
+================================================================================
+
+[2025-07-02T10:10:06.320Z] [GET] http://localhost:3000/api/v1/credentials/member/by-email/test@example.com
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 200
+Response Headers: {
+  "content-length": "13",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"d-XXcxLjB/sjfS0AB6+CxvXcLGrm4\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "data": null
+}
+Result: SUCCESS
+================================================================================
+
+[2025-07-02T10:10:06.335Z] [POST] http://localhost:3000/api/v1/credentials/member
+Request Headers: {
+  Content-Type: application/json
+}
+Request Body: {
+  "email": "integration@example.com",
+  "password": "testpass"
+}
+Status: 201
+Response Headers: {
+  "content-length": "229",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"e5-7iTY7uenrb6GwwtjIXPHzbbQIOk\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "data": {
+    "id": 16,
+    "email": "integration@example.com",
+    "hashedPassword": "$2b$10$ltoqPshb4qzjfJ1Zz5YQYO261/ev1i8J4/.j9uWKOIx/dd9cvp1Re",
+    "lastLoginAt": null,
+    "createdAt": "2025-07-02T10:10:06.416Z",
+    "updatedAt": "2025-07-02T10:10:06.416Z"
+  }
+}
+Result: SUCCESS
+================================================================================
+
+[2025-07-02T10:10:06.435Z] [PUT] http://localhost:3000/api/v1/credentials/member/1
+Request Headers: {
+  Content-Type: application/json
+}
+Request Body: {
+  "email": "integration@example.com",
+  "password": "testpass"
+}
+Status: 500
+Response Headers: {
+  "content-length": "995",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"3e3-M93BRtRRR3oSMbFum2naRhGioOg\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "message": "\nInvalid `prisma.memberAccountCredentials.update()` invocation:\n\n\nAn operation failed because it depends on one or more records that were required but not found. Record to update not found.",
+  "stack": "PrismaClientKnownRequestError: \nInvalid `prisma.memberAccountCredentials.update()` invocation:\n\n\nAn operation failed because it depends on one or more records that were required but not found. Record to update not found.\n    at new PrismaClientKnownRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:1687)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7451)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
+}
+Result: FAIL
+================================================================================
+
+[2025-07-02T10:10:06.509Z] [DELETE] http://localhost:3000/api/v1/credentials/member/1
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 500
+Response Headers: {
+  "content-length": "1005",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"3ed-mkzu7nzbzQ3QfLNgXQRumOUbhGE\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "message": "\nInvalid `prisma.memberAccountCredentials.delete()` invocation:\n\n\nAn operation failed because it depends on one or more records that were required but not found. Record to delete does not exist.",
+  "stack": "PrismaClientKnownRequestError: \nInvalid `prisma.memberAccountCredentials.delete()` invocation:\n\n\nAn operation failed because it depends on one or more records that were required but not found. Record to delete does not exist.\n    at new PrismaClientKnownRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:1687)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7451)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
+}
+Result: FAIL
+================================================================================
+
+[2025-07-02T10:10:06.524Z] [GET] http://localhost:3000/api/v1/credentials/instructor/1
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 200
+Response Headers: {
+  "content-length": "13",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"d-XXcxLjB/sjfS0AB6+CxvXcLGrm4\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "data": null
+}
+Result: SUCCESS
+================================================================================
+
+[2025-07-02T10:10:06.535Z] [GET] http://localhost:3000/api/v1/credentials/instructor/by-instructor/1
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 200
+Response Headers: {
+  "content-length": "13",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"d-XXcxLjB/sjfS0AB6+CxvXcLGrm4\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "data": null
+}
+Result: SUCCESS
+================================================================================
+
+[2025-07-02T10:10:06.543Z] [GET] http://localhost:3000/api/v1/credentials/instructor/by-username/testuser
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 200
+Response Headers: {
+  "content-length": "13",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"d-XXcxLjB/sjfS0AB6+CxvXcLGrm4\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "data": null
+}
+Result: SUCCESS
+================================================================================
+
+[2025-07-02T10:10:06.553Z] [POST] http://localhost:3000/api/v1/credentials/instructor
+Request Headers: {
+  Content-Type: application/json
+}
+Request Body: {
+  "username": "testuser",
+  "password": "testpass"
+}
+Status: 500
+Response Headers: {
+  "content-length": "3299",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"ce3-p/JaU8Yxsgilq740KQ+Cr+tBpn4\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "message": "\nInvalid `prisma.instructorAccountCredentials.create()` invocation:\n\n{\n  data: {\n    username: \"testuser\",\n    hashedPassword: \"$2b$10$1ozXYexpX7iW2RtuIOKzD.H26zhnFeBDjl.XoWstStb2MJp8vcRyq\",\n    instructor: {\n      connect: {\n        id: undefined,\n?       email?: String,\n?       AND?: InstructorWhereInput | InstructorWhereInput[],\n?       OR?: InstructorWhereInput[],\n?       NOT?: InstructorWhereInput | InstructorWhereInput[],\n?       firstName?: StringFilter | String,\n?       middleName?: StringNullableFilter | String | Null,\n?       lastName?: StringFilter | String,\n?       gender?: StringFilter | String,\n?       dateOfBirth?: DateTimeFilter | DateTime,\n?       number?: StringFilter | String,\n?       isActive?: BoolFilter | Boolean,\n?       createdAt?: DateTimeFilter | DateTime,\n?       updatedAt?: DateTimeFilter | DateTime,\n?       credentials?: InstructorAccountCredentialsNullableScalarRelationFilter | InstructorAccountCredentialsWhereInput | Null,\n?       personalizedPrograms?: PersonalizedProgramListRelationFilter,\n?       standardPrograms?: StandardProgramListRelationFilter\n      }\n    }\n  }\n}\n\nArgument `connect` of type InstructorWhereUniqueInput needs at least one of `id` or `email` arguments. Available options are marked with ?.",
+  "stack": "PrismaClientValidationError: \nInvalid `prisma.instructorAccountCredentials.create()` invocation:\n\n{\n  data: {\n    username: \"testuser\",\n    hashedPassword: \"$2b$10$1ozXYexpX7iW2RtuIOKzD.H26zhnFeBDjl.XoWstStb2MJp8vcRyq\",\n    instructor: {\n      connect: {\n        id: undefined,\n?       email?: String,\n?       AND?: InstructorWhereInput | InstructorWhereInput[],\n?       OR?: InstructorWhereInput[],\n?       NOT?: InstructorWhereInput | InstructorWhereInput[],\n?       firstName?: StringFilter | String,\n?       middleName?: StringNullableFilter | String | Null,\n?       lastName?: StringFilter | String,\n?       gender?: StringFilter | String,\n?       dateOfBirth?: DateTimeFilter | DateTime,\n?       number?: StringFilter | String,\n?       isActive?: BoolFilter | Boolean,\n?       createdAt?: DateTimeFilter | DateTime,\n?       updatedAt?: DateTimeFilter | DateTime,\n?       credentials?: InstructorAccountCredentialsNullableScalarRelationFilter | InstructorAccountCredentialsWhereInput | Null,\n?       personalizedPrograms?: PersonalizedProgramListRelationFilter,\n?       standardPrograms?: StandardProgramListRelationFilter\n      }\n    }\n  }\n}\n\nArgument `connect` of type InstructorWhereUniqueInput needs at least one of `id` or `email` arguments. Available options are marked with ?.\n    at new PrismaClientValidationError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:2580)\n    at Pn (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:29:1367)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7090)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
+}
+Result: FAIL
+================================================================================
+
+[2025-07-02T10:10:06.618Z] [PUT] http://localhost:3000/api/v1/credentials/instructor/1
+Request Headers: {
+  Content-Type: application/json
+}
+Request Body: {
+  "username": "testuser",
+  "password": "testpass"
+}
+Status: 500
+Response Headers: {
+  "content-length": "1003",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"3eb-sLtEvglo1s81+W22+7xf0rqqdd4\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "message": "\nInvalid `prisma.instructorAccountCredentials.update()` invocation:\n\n\nAn operation failed because it depends on one or more records that were required but not found. Record to update not found.",
+  "stack": "PrismaClientKnownRequestError: \nInvalid `prisma.instructorAccountCredentials.update()` invocation:\n\n\nAn operation failed because it depends on one or more records that were required but not found. Record to update not found.\n    at new PrismaClientKnownRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:1687)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7451)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
+}
+Result: FAIL
+================================================================================
+
+[2025-07-02T10:10:06.688Z] [DELETE] http://localhost:3000/api/v1/credentials/instructor/1
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 500
+Response Headers: {
+  "content-length": "1013",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"3f5-zdarz+cyzkbgwHS6E6aOZcqgA+I\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "message": "\nInvalid `prisma.instructorAccountCredentials.delete()` invocation:\n\n\nAn operation failed because it depends on one or more records that were required but not found. Record to delete does not exist.",
+  "stack": "PrismaClientKnownRequestError: \nInvalid `prisma.instructorAccountCredentials.delete()` invocation:\n\n\nAn operation failed because it depends on one or more records that were required but not found. Record to delete does not exist.\n    at new PrismaClientKnownRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:1687)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7451)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
+}
+Result: FAIL
+================================================================================
+
+[2025-07-02T10:10:06.704Z] [GET] http://localhost:3000/api/v1/credentials/admin/1
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 200
+Response Headers: {
+  "content-length": "13",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"d-XXcxLjB/sjfS0AB6+CxvXcLGrm4\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "data": null
+}
+Result: SUCCESS
+================================================================================
+
+[2025-07-02T10:10:06.713Z] [GET] http://localhost:3000/api/v1/credentials/admin/by-admin/1
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 200
+Response Headers: {
+  "content-length": "13",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"d-XXcxLjB/sjfS0AB6+CxvXcLGrm4\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "data": null
+}
+Result: SUCCESS
+================================================================================
+
+[2025-07-02T10:10:06.719Z] [GET] http://localhost:3000/api/v1/credentials/admin/by-username/testadmin
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 200
+Response Headers: {
+  "content-length": "13",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"d-XXcxLjB/sjfS0AB6+CxvXcLGrm4\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "data": null
+}
+Result: SUCCESS
+================================================================================
+
+[2025-07-02T10:10:06.727Z] [POST] http://localhost:3000/api/v1/credentials/admin
+Request Headers: {
+  Content-Type: application/json
+}
+Request Body: {
+  "username": "testadmin",
+  "password": "testpass"
+}
+Status: 500
+Response Headers: {
+  "content-length": "2747",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"abb-XOTginXdDzec/jgeL64w6pXGUNM\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "message": "\nInvalid `prisma.adminAccountCredentials.create()` invocation:\n\n{\n  data: {\n    username: \"testadmin\",\n    hashedPassword: \"$2b$10$vJzufJwRiwS343Ab6a42YOga2t1WFfjCDPq2BhNUVEBFyl7Hdy0DO\",\n    admin: {\n      connect: {\n        id: undefined,\n?       email?: String,\n?       AND?: AdminWhereInput | AdminWhereInput[],\n?       OR?: AdminWhereInput[],\n?       NOT?: AdminWhereInput | AdminWhereInput[],\n?       firstName?: StringFilter | String,\n?       middleName?: StringNullableFilter | String | Null,\n?       lastName?: StringFilter | String,\n?       role?: StringFilter | String,\n?       isActive?: BoolFilter | Boolean,\n?       createdAt?: DateTimeFilter | DateTime,\n?       updatedAt?: DateTimeFilter | DateTime,\n?       credentials?: AdminAccountCredentialsNullableScalarRelationFilter | AdminAccountCredentialsWhereInput | Null\n      }\n    }\n  }\n}\n\nArgument `connect` of type AdminWhereUniqueInput needs at least one of `id` or `email` arguments. Available options are marked with ?.",
+  "stack": "PrismaClientValidationError: \nInvalid `prisma.adminAccountCredentials.create()` invocation:\n\n{\n  data: {\n    username: \"testadmin\",\n    hashedPassword: \"$2b$10$vJzufJwRiwS343Ab6a42YOga2t1WFfjCDPq2BhNUVEBFyl7Hdy0DO\",\n    admin: {\n      connect: {\n        id: undefined,\n?       email?: String,\n?       AND?: AdminWhereInput | AdminWhereInput[],\n?       OR?: AdminWhereInput[],\n?       NOT?: AdminWhereInput | AdminWhereInput[],\n?       firstName?: StringFilter | String,\n?       middleName?: StringNullableFilter | String | Null,\n?       lastName?: StringFilter | String,\n?       role?: StringFilter | String,\n?       isActive?: BoolFilter | Boolean,\n?       createdAt?: DateTimeFilter | DateTime,\n?       updatedAt?: DateTimeFilter | DateTime,\n?       credentials?: AdminAccountCredentialsNullableScalarRelationFilter | AdminAccountCredentialsWhereInput | Null\n      }\n    }\n  }\n}\n\nArgument `connect` of type AdminWhereUniqueInput needs at least one of `id` or `email` arguments. Available options are marked with ?.\n    at new PrismaClientValidationError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:2580)\n    at Pn (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:29:1367)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7090)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
+}
+Result: FAIL
+================================================================================
+
+[2025-07-02T10:10:06.797Z] [PUT] http://localhost:3000/api/v1/credentials/admin/1
+Request Headers: {
+  Content-Type: application/json
+}
+Request Body: {
+  "username": "testadmin",
+  "password": "testpass"
+}
+Status: 500
+Response Headers: {
+  "content-length": "993",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"3e1-E6zrDbogEO1kvTet10X0p5BEW2Y\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "message": "\nInvalid `prisma.adminAccountCredentials.update()` invocation:\n\n\nAn operation failed because it depends on one or more records that were required but not found. Record to update not found.",
+  "stack": "PrismaClientKnownRequestError: \nInvalid `prisma.adminAccountCredentials.update()` invocation:\n\n\nAn operation failed because it depends on one or more records that were required but not found. Record to update not found.\n    at new PrismaClientKnownRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:1687)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7451)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
+}
+Result: FAIL
+================================================================================
+
+[2025-07-02T10:10:06.873Z] [DELETE] http://localhost:3000/api/v1/credentials/admin/1
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 500
+Response Headers: {
+  "content-length": "1003",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"3eb-aviTFu8l525cZrrexHfcRJypR5w\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "message": "\nInvalid `prisma.adminAccountCredentials.delete()` invocation:\n\n\nAn operation failed because it depends on one or more records that were required but not found. Record to delete does not exist.",
+  "stack": "PrismaClientKnownRequestError: \nInvalid `prisma.adminAccountCredentials.delete()` invocation:\n\n\nAn operation failed because it depends on one or more records that were required but not found. Record to delete does not exist.\n    at new PrismaClientKnownRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:1687)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7451)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
+}
+Result: FAIL
+================================================================================
+
+[2025-07-02T10:10:06.888Z] [GET] http://localhost:3000/api/v1/credentials/member/email-available?email=test@example.com
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 500
+Response Headers: {
+  "content-length": "981",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"3d5-ynOWOrgXpcb+LMJaeF4iCG+By5Q\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "message": "\nInvalid `prisma.memberAccountCredentials.findUnique()` invocation:\n\n{\n  where: {\n+   id: Int\n  }\n}\n\nArgument `id` is missing.",
+  "stack": "PrismaClientValidationError: \nInvalid `prisma.memberAccountCredentials.findUnique()` invocation:\n\n{\n  where: {\n+   id: Int\n  }\n}\n\nArgument `id` is missing.\n    at new PrismaClientValidationError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:2580)\n    at Pn (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:29:1367)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7090)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
+}
+Result: FAIL
+================================================================================
+
+[2025-07-02T10:10:06.898Z] [GET] http://localhost:3000/api/v1/credentials/instructor/username-available?username=testuser
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 500
+Response Headers: {
+  "content-length": "989",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"3dd-9RrOXNl6vLhU54oxNrHmcSk+Jhw\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "message": "\nInvalid `prisma.instructorAccountCredentials.findUnique()` invocation:\n\n{\n  where: {\n+   id: Int\n  }\n}\n\nArgument `id` is missing.",
+  "stack": "PrismaClientValidationError: \nInvalid `prisma.instructorAccountCredentials.findUnique()` invocation:\n\n{\n  where: {\n+   id: Int\n  }\n}\n\nArgument `id` is missing.\n    at new PrismaClientValidationError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:2580)\n    at Pn (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:29:1367)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7090)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
+}
+Result: FAIL
+================================================================================
+
+[2025-07-02T10:10:06.904Z] [GET] http://localhost:3000/api/v1/credentials/admin/username-available?username=testadmin
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 500
+Response Headers: {
+  "content-length": "979",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"3d3-gq1AtH83I/cyMzH3FkJH0ogPPaw\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "message": "\nInvalid `prisma.adminAccountCredentials.findUnique()` invocation:\n\n{\n  where: {\n+   id: Int\n  }\n}\n\nArgument `id` is missing.",
+  "stack": "PrismaClientValidationError: \nInvalid `prisma.adminAccountCredentials.findUnique()` invocation:\n\n{\n  where: {\n+   id: Int\n  }\n}\n\nArgument `id` is missing.\n    at new PrismaClientValidationError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:21:2580)\n    at Pn (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:29:1367)\n    at handleRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:7090)\n    at handleAndLogRequestError (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6771)\n    at <anonymous> (D:\\dev\\personal-trainer-server\\node_modules\\@prisma\\client\\runtime\\library.js:121:6478)\n    at processTicksAndRejections (native:7:39)"
+}
+Result: FAIL
+================================================================================
+
+[2025-07-02T10:10:06.910Z] [GET] http://localhost:3000/api/v1/credentials/username-available?username=testuser
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 200
+Response Headers: {
+  "content-length": "27",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"1b-0d79I2YxB9ZRuC3c4X6jYxYknJk\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "data": {
+    "available": true
+  }
+}
+Result: SUCCESS
+================================================================================
+
+[2025-07-02T10:10:06.942Z] [GET] http://localhost:3000/api/v1/credentials/find-by-username?username=testuser
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 200
+Response Headers: {
+  "content-length": "41",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"29-Dcn0u+ESLassA1QRXufOgpTWvxo\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "data": {
+    "type": null,
+    "credentials": null
+  }
+}
+Result: SUCCESS
+================================================================================
+
+[2025-07-02T10:10:06.960Z] [GET] http://localhost:3000/api/v1/credentials/stats
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 200
+Response Headers: {
+  "content-length": "83",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"53-hXG8YrNYksFXGwwBegHWKkS/Qeo\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "data": {
+    "totalCredentials": 21,
+    "byType": {
+      "members": 15,
+      "instructors": 4,
+      "admins": 2
+    }
+  }
+}
+Result: SUCCESS
+================================================================================
+
+[2025-07-02T10:10:06.982Z] [GET] http://localhost:3000/api/v1/credentials/recent-logins
+Request Headers: {
+  Content-Type: application/json
+}
+Status: 200
+Response Headers: {
+  "content-length": "11",
+  "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+  "content-type": "application/json; charset=utf-8",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Wed, 02 Jul 2025 10:10:06 GMT",
+  "etag": "W/\"b-EFAlOux7Kcr/ZEgGkn2r+oFAbu4\"",
+  "origin-agent-cluster": "?1",
+  "referrer-policy": "no-referrer",
+  "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN",
+  "x-permitted-cross-domain-policies": "none",
+  "x-xss-protection": "0"
+}
+Response Body:
+{
+  "data": []
+}
+Result: SUCCESS
+================================================================================
+
+Integration test run complete.
+Success: 14
+Fail/Error: 11
+Total: 25
+

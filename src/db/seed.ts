@@ -38,10 +38,11 @@ function createRandomServiceData(membershipId: number) {
 }
 
 // Create random member data
-function createRandomMemberData() {
+function createRandomMemberData(credentialsId: number) {
   const firstName = faker.person.firstName();
   const lastName = faker.person.lastName();
   return {
+    memberAccountCredentialsId: credentialsId,
     firstName: firstName,
     middleName: faker.helpers.maybe(() => faker.person.middleName(), {
       probability: 0.3,
@@ -49,8 +50,16 @@ function createRandomMemberData() {
     lastName: lastName,
     gender: faker.helpers.arrayElement(["Male", "Female", "Other"]),
     dateOfBirth: faker.date.birthdate({ min: 18, max: 70, mode: "age" }),
-    email: faker.internet.email({ firstName, lastName }),
-    number: faker.phone.number(),
+    phone: faker.phone.number(),
+    dateOfApplication: faker.date.recent({ days: 30 }),
+    appliedMembership: faker.helpers.arrayElement([
+      "Basic Membership",
+      "Premium Membership",
+      "VIP Membership",
+    ]),
+    monthOfApplication: faker.date
+      .recent({ days: 30 })
+      .toLocaleString("default", { month: "long" }),
   };
 }
 
@@ -68,32 +77,6 @@ function createRandomInstructorData() {
     dateOfBirth: faker.date.birthdate({ min: 22, max: 50, mode: "age" }),
     email: faker.internet.email({ firstName, lastName }),
     number: faker.phone.number(),
-  };
-}
-
-// Create random member registration data
-function createRandomMemberRegistrationData() {
-  const firstName = faker.person.firstName();
-  const lastName = faker.person.lastName();
-  return {
-    firstName: firstName,
-    middleName: faker.helpers.maybe(() => faker.person.middleName(), {
-      probability: 0.3,
-    }),
-    lastName: lastName,
-    gender: faker.helpers.arrayElement(["Male", "Female", "Other"]),
-    dateOfBirth: faker.date.birthdate({ min: 18, max: 70, mode: "age" }),
-    email: faker.internet.email({ firstName, lastName }),
-    number: faker.phone.number(),
-    dateOfApplication: faker.date.recent({ days: 30 }),
-    appliedMembership: faker.helpers.arrayElement([
-      "Basic Membership",
-      "Premium Membership",
-      "VIP Membership",
-    ]),
-    monthOfApplication: faker.date
-      .recent({ days: 30 })
-      .toLocaleString("default", { month: "long" }),
   };
 }
 
@@ -154,22 +137,19 @@ async function seedMembers(memberships: any[]) {
   const members = [];
 
   for (let i = 0; i < 15; i++) {
-    const memberData = createRandomMemberData();
-    const member = await prisma.member.create({
-      data: memberData,
-    });
-
-    // Create account credentials for each member
+    // Create account credentials for each member first
     const hashedPassword = await bcrypt.hash("password123", 10);
-    await prisma.memberAccountCredentials.create({
+    const credentials = await prisma.memberAccountCredentials.create({
       data: {
-        memberId: member.id,
-        username: faker.internet.userName({
-          firstName: memberData.firstName,
-          lastName: memberData.lastName,
-        }),
+        email: faker.internet.email(),
         hashedPassword: hashedPassword,
       },
+    });
+
+    // Now create the member and link credentials
+    const memberData = createRandomMemberData(credentials.id);
+    const member = await prisma.member.create({
+      data: memberData,
     });
 
     // Create a subscription for each member
@@ -185,9 +165,9 @@ async function seedMembers(memberships: any[]) {
       },
     });
 
-    // Create preference log for some members
+    // Create standard preference log for some members
     if (faker.datatype.boolean()) {
-      await prisma.memberPreferenceLog.create({
+      await prisma.memberStandardPreferenceLog.create({
         data: {
           memberId: member.id,
           goals: faker.lorem.sentences(2),
@@ -205,21 +185,6 @@ async function seedMembers(memberships: any[]) {
   }
 
   return members;
-}
-
-// Seed member registrations
-async function seedMemberRegistrations() {
-  const registrations = [];
-
-  for (let i = 0; i < 8; i++) {
-    const registration = await prisma.memberRegistration.create({
-      data: createRandomMemberRegistrationData(),
-    });
-
-    registrations.push(registration);
-  }
-
-  return registrations;
 }
 
 // Seed standard programs and enrollments
@@ -272,10 +237,12 @@ async function seedPersonalizedPrograms(instructors: any[], members: any[]) {
   const programs = [];
 
   for (let i = 0; i < 8; i++) {
+    const member = faker.helpers.arrayElement(members);
+    const instructor = faker.helpers.arrayElement(instructors);
     const program = await prisma.personalizedProgram.create({
       data: {
-        memberId: faker.helpers.arrayElement(members).id,
-        instructorId: faker.helpers.arrayElement(instructors).id,
+        memberId: member.id,
+        instructorId: instructor.id,
         name: `Personalized ${faker.helpers.arrayElement([
           "Weight Loss",
           "Muscle Building",
@@ -290,6 +257,7 @@ async function seedPersonalizedPrograms(instructors: any[], members: any[]) {
     const startDate = faker.date.recent({ days: 30 });
     const enrollment = await prisma.personalizedProgramEnrollment.create({
       data: {
+        memberId: member.id,
         personalizedProgramId: program.id,
         goals: faker.lorem.sentences(2),
         startDate: startDate,
@@ -302,6 +270,7 @@ async function seedPersonalizedPrograms(instructors: any[], members: any[]) {
     for (let j = 0; j < logCount; j++) {
       await prisma.memberPersonalizedProgressLog.create({
         data: {
+          memberId: member.id,
           personalizedProgramEnrollmentId: enrollment.id,
           progress: faker.lorem.sentences(2),
         },
@@ -397,11 +366,10 @@ async function main() {
     prisma.personalizedProgram.deleteMany({}),
     prisma.standardProgramEnrollment.deleteMany({}),
     prisma.standardProgram.deleteMany({}),
-    prisma.memberPreferenceLog.deleteMany({}),
+    prisma.memberStandardPreferenceLog.deleteMany({}),
     prisma.memberSubscription.deleteMany({}),
     prisma.memberAccountCredentials.deleteMany({}),
     prisma.member.deleteMany({}),
-    prisma.memberRegistration.deleteMany({}),
     prisma.instructorAccountCredentials.deleteMany({}),
     prisma.instructor.deleteMany({}),
     prisma.adminAccountCredentials.deleteMany({}),
@@ -423,9 +391,6 @@ async function main() {
   console.log(
     `✅ Created ${members.length} members with credentials and subscriptions`
   );
-
-  const registrations = await seedMemberRegistrations();
-  console.log(`✅ Created ${registrations.length} member registrations`);
 
   const standardPrograms = await seedStandardPrograms(
     instructors,
