@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import type { NextFunction, Request, Response } from "express";
 import Container from "typedi";
 import { SytemService } from "~/services/system.service";

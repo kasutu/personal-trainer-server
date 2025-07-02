@@ -12,11 +12,16 @@ export class MemberSubscriptionService {
     return prisma.memberSubscription.findMany();
   }
 
-  async create(data: Prisma.MemberSubscriptionCreateInput): Promise<MemberSubscription> {
+  async create(
+    data: Prisma.MemberSubscriptionCreateInput
+  ): Promise<MemberSubscription> {
     return prisma.memberSubscription.create({ data });
   }
 
-  async update(id: number, data: Prisma.MemberSubscriptionUpdateInput): Promise<MemberSubscription> {
+  async update(
+    id: number,
+    data: Prisma.MemberSubscriptionUpdateInput
+  ): Promise<MemberSubscription> {
     return prisma.memberSubscription.update({ where: { id }, data });
   }
 
@@ -26,5 +31,9 @@ export class MemberSubscriptionService {
 
   async getByPerson(personId: number): Promise<MemberSubscription[]> {
     return prisma.memberSubscription.findMany({ where: { personId } });
+  }
+
+  async getByMembership(membershipId: number): Promise<MemberSubscription[]> {
+    return prisma.memberSubscription.findMany({ where: { membershipId } });
   }
 }

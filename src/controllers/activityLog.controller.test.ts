@@ -1,43 +1,43 @@
-import "reflect-metadata";
 import { describe, it, beforeAll, afterAll, expect } from "bun:test";
-import { ActivityLogService } from "./activityLog.service";
-import { prisma } from "~/drivers/prisma";
+import { ActivityLogService } from "../services/activityLog.service";
+import { PersonService } from "../services/person.service";
+import { prisma } from "../drivers/prisma";
 
 let service: ActivityLogService;
+let personService: PersonService;
 let logId: number;
+let personId: number;
 
-const PERSON_ID = 1; // Set to a valid personId in your test DB
-const testLog = {
-  activityType: "WORKOUT",
-  activityName: "Test Activity",
-  person: { connect: { id: PERSON_ID } },
-};
-
-describe("ActivityLogService", () => {
+describe("ActivityLogService Integration", () => {
   beforeAll(async () => {
     service = new ActivityLogService();
-    await prisma.activityLog.deleteMany({
-      where: {
-        personId: PERSON_ID,
-        activityName: testLog.activityName,
-      },
+    personService = new PersonService();
+    // Create a test person
+    const person = await personService.create({
+      firstName: "ActivityLogTest",
+      lastName: "User",
+      gender: "Other",
+      dateOfBirth: new Date("1990-01-01"),
     });
+    personId = person.id;
+    // Clean up any logs for this person
+    await prisma.activityLog.deleteMany({ where: { personId } });
   });
 
   afterAll(async () => {
-    await prisma.activityLog.deleteMany({
-      where: {
-        personId: PERSON_ID,
-        activityName: testLog.activityName,
-      },
-    });
+    await prisma.activityLog.deleteMany({ where: { personId } });
+    await prisma.person.delete({ where: { id: personId } });
     await prisma.$disconnect();
   });
 
   it("should create an activity log", async () => {
-    const log = await service.create(testLog);
+    const log = await service.create({
+      person: { connect: { id: personId } },
+      activityType: "WORKOUT",
+      activityName: "Test Activity",
+    });
     expect(log).toBeDefined();
-    expect(log.personId).toBe(PERSON_ID);
+    expect(log.personId).toBe(personId);
     logId = log.id;
   });
 
@@ -61,7 +61,7 @@ describe("ActivityLogService", () => {
   });
 
   it("should get by person", async () => {
-    const logs = await service.getByPerson(PERSON_ID);
+    const logs = await service.getByPerson(personId);
     expect(logs.some((l) => l.id === logId)).toBe(true);
   });
 
