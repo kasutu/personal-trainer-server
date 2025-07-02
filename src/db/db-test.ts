@@ -390,37 +390,28 @@ async function testComplexRelationships() {
     });
     membershipId = membership.id;
 
-    const existingMember = await prisma.member.findUnique({
+    // Clean up any existing test data first
+    await prisma.member.deleteMany({
       where: { email: "relationship.tester@example.com" },
     });
-
-    if (existingMember) {
-      console.log("Member already exists:", existingMember);
-      memberId = existingMember.id;
-    } else {
-      const member = await prisma.member.create({
-        data: {
-          firstName: "Relationship",
-          lastName: "Tester",
-          gender: "Male",
-          dateOfBirth: new Date("1990-01-01"),
-          email: "relationship.tester@example.com",
-          number: "1234567890",
-        },
-      });
-      memberId = member.id;
-    }
-
-    const instructor = await prisma.instructor.upsert({
+    await prisma.instructor.deleteMany({
       where: { email: "instructor.tester@example.com" },
-      update: {
-        firstName: "Instructor",
+    });
+
+    const member = await prisma.member.create({
+      data: {
+        firstName: "Relationship",
         lastName: "Tester",
-        gender: "Female",
-        dateOfBirth: new Date("1985-01-01"),
-        number: "0987654321",
+        gender: "Male",
+        dateOfBirth: new Date("1990-01-01"),
+        email: "relationship.tester@example.com",
+        number: "1234567890",
       },
-      create: {
+    });
+    memberId = member.id;
+
+    const instructor = await prisma.instructor.create({
+      data: {
         firstName: "Instructor",
         lastName: "Tester",
         gender: "Female",
@@ -429,7 +420,6 @@ async function testComplexRelationships() {
         number: "0987654321",
       },
     });
-
     instructorId = instructor.id;
 
     logTest("CREATE", "Relationship Setup", true);
@@ -478,7 +468,7 @@ async function testComplexRelationships() {
     logTest("CREATE", "Standard Program & Enrollment", false, error);
   }
 
-  // Test Personalized Program
+  // Test Personalized Program - FIXED RELATIONSHIPS
   try {
     const personalizedProgram = await prisma.personalizedProgram.create({
       data: {
@@ -491,8 +481,8 @@ async function testComplexRelationships() {
 
     const enrollment = await prisma.personalizedProgramEnrollment.create({
       data: {
-        personalizedProgramId: personalizedProgram.id,
         memberId: memberId,
+        personalizedProgramId: personalizedProgram.id,
         goals: "Personalized fitness goals",
         startDate: new Date(),
         endDate: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000),
@@ -501,6 +491,7 @@ async function testComplexRelationships() {
 
     await prisma.memberPersonalizedProgressLog.create({
       data: {
+        memberId: memberId, // Now properly required
         personalizedProgramEnrollmentId: enrollment.id,
         progress: "Week 1: Completed initial assessment",
       },
@@ -548,22 +539,72 @@ async function testComplexRelationships() {
             },
           },
         },
+        personalizedProgramEnrollments: {
+          include: {
+            personalizedProgram: {
+              include: { instructor: true },
+            },
+          },
+        },
+        personalizedProgressLogs: true,
       },
     });
     if (!memberWithDetails) throw new Error("Complex member query failed");
+
+    // Verify the relationships were properly created
+    if (memberWithDetails.subscriptions.length === 0) {
+      throw new Error("No subscriptions found");
+    }
+    if (memberWithDetails.personalizedPrograms.length === 0) {
+      throw new Error("No personalized programs found");
+    }
+    if (memberWithDetails.personalizedProgramEnrollments.length === 0) {
+      throw new Error("No personalized program enrollments found");
+    }
+    if (memberWithDetails.personalizedProgressLogs.length === 0) {
+      throw new Error("No progress logs found");
+    }
+
     logTest("READ", "Complex Member Query", true);
   } catch (error) {
     logTest("READ", "Complex Member Query", false, error);
   }
 
-  // Cleanup
+  // Test cascade delete - member should cascade properly
   try {
     await prisma.member.delete({ where: { id: memberId } });
 
+    // Verify cascades worked
+    const deletedSubscriptions = await prisma.memberSubscription.findMany({
+      where: { memberId: memberId },
+    });
+    const deletedEnrollments =
+      await prisma.personalizedProgramEnrollment.findMany({
+        where: { memberId: memberId },
+      });
+    const deletedProgressLogs =
+      await prisma.memberPersonalizedProgressLog.findMany({
+        where: { memberId: memberId },
+      });
+
+    if (
+      deletedSubscriptions.length > 0 ||
+      deletedEnrollments.length > 0 ||
+      deletedProgressLogs.length > 0
+    ) {
+      throw new Error("Cascade delete did not work properly");
+    }
+
+    logTest("DELETE", "Member Cascade", true);
+  } catch (error) {
+    logTest("DELETE", "Member Cascade", false, error);
+  }
+
+  // Cleanup remaining data
+  try {
     await prisma.standardProgram.deleteMany({
       where: { instructorId: instructorId },
     });
-
     await prisma.instructor.delete({ where: { id: instructorId } });
     await prisma.membership.delete({ where: { id: membershipId } });
     logTest("DELETE", "Relationship Cleanup", true);
@@ -835,6 +876,93 @@ async function testTransactions() {
   }
 }
 
+// INDEX PERFORMANCE TESTS
+async function testIndexPerformance() {
+  console.log("\n🧪 Testing Index Performance");
+
+  // Test email index on Member
+  try {
+    const startTime = Date.now();
+    await prisma.member.findMany({
+      where: { email: { contains: "@example.com" } },
+      take: 100,
+    });
+    const endTime = Date.now();
+
+    if (endTime - startTime > 1000) {
+      throw new Error(`Query took too long: ${endTime - startTime}ms`);
+    }
+    logTest("PERFORMANCE", "Email Index Query", true);
+  } catch (error) {
+    logTest("PERFORMANCE", "Email Index Query", false, error);
+  }
+
+  // Test isActive index
+  try {
+    const startTime = Date.now();
+    await prisma.member.findMany({
+      where: { isActive: true },
+      take: 100,
+    });
+    const endTime = Date.now();
+
+    if (endTime - startTime > 1000) {
+      throw new Error(`Query took too long: ${endTime - startTime}ms`);
+    }
+    logTest("PERFORMANCE", "isActive Index Query", true);
+  } catch (error) {
+    logTest("PERFORMANCE", "isActive Index Query", false, error);
+  }
+}
+
+// CONSTRAINT TESTS
+async function testConstraints() {
+  console.log("\n🧪 Testing Database Constraints");
+
+  // Test unique email constraint
+  try {
+    await prisma.member.create({
+      data: {
+        firstName: "Test",
+        lastName: "User1",
+        gender: "Male",
+        dateOfBirth: new Date("1990-01-01"),
+        email: "constraint.test@example.com",
+        number: "1234567890",
+      },
+    });
+
+    // This should fail due to unique constraint
+    await prisma.member.create({
+      data: {
+        firstName: "Test",
+        lastName: "User2",
+        gender: "Female",
+        dateOfBirth: new Date("1990-01-01"),
+        email: "constraint.test@example.com", // Duplicate email
+        number: "0987654321",
+      },
+    });
+
+    logTest("CONSTRAINT", "Unique Email", false, "Should have failed");
+  } catch (error) {
+    if (error.code === "P2002" && error.meta?.target?.includes("email")) {
+      logTest("CONSTRAINT", "Unique Email", true);
+    } else {
+      logTest("CONSTRAINT", "Unique Email", false, error);
+    }
+  }
+
+  // Cleanup
+  try {
+    await prisma.member.deleteMany({
+      where: { email: "constraint.test@example.com" },
+    });
+  } catch (error) {
+    console.log("Cleanup error:", error);
+  }
+}
+
 // Main test runner
 async function runAllTests() {
   console.log("🚀 Starting Comprehensive CRUD Tests for Prisma\n");
@@ -851,6 +979,8 @@ async function runAllTests() {
   await testBatchOperations();
   await testTransactions();
   await testComplexRelationships();
+  await testIndexPerformance();
+  await testConstraints();
 
   // Print final results
   console.log("\n" + "=".repeat(60));
