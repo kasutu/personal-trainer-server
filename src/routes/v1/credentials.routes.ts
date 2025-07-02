@@ -1,4 +1,4 @@
-import { CredentialsController } from "~/controllers/credentials.controller";
+import { CredentialsController } from "~/controllers/auth.controller";
 import { Routes } from "~/types/infrastructure/routes.types";
 
 export default class CredentialsRoute extends Routes {
