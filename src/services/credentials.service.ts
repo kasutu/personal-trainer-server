@@ -31,9 +31,6 @@ export type AnyCredentials =
 
 @Service()
 export class CredentialsService {
-  /**
-   * Get member credentials by ID
-   */
   async getMemberCredentialsById(
     id: number
   ): Promise<MemberAccountCredentials | null> {
@@ -42,34 +39,25 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Get member credentials by member ID
-   */
   async getMemberCredentialsByMemberId(
-    memberId: number
+    id: number
   ): Promise<MemberAccountCredentials | null> {
-    return prisma.memberAccountCredentials.findUnique({
-      where: { memberId },
+    return prisma.memberAccountCredentials.findFirst({
+      where: { id },
     });
   }
 
-  /**
-   * Get member credentials by username
-   */
-  async getMemberCredentialsByUsername(
-    username: string
+  async getMemberCredentialsByEmail(
+    email: string
   ): Promise<MemberCredentialsWithUser | null> {
     return prisma.memberAccountCredentials.findUnique({
-      where: { username },
+      where: { email },
       include: {
         member: true,
       },
     });
   }
 
-  /**
-   * Create member credentials
-   */
   async createMemberCredentials(
     data: Prisma.MemberAccountCredentialsCreateInput
   ): Promise<MemberAccountCredentials> {
@@ -78,9 +66,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Update member credentials
-   */
   async updateMemberCredentials(
     id: number,
     data: Prisma.MemberAccountCredentialsUpdateInput
@@ -91,43 +76,29 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Update member password
-   */
   async updateMemberPassword(
-    memberId: number,
+    id: number,
     hashedPassword: string
   ): Promise<MemberAccountCredentials> {
     return prisma.memberAccountCredentials.update({
-      where: { memberId },
+      where: { id },
       data: { hashedPassword },
     });
   }
 
-  /**
-   * Update member last login
-   */
-  async updateMemberLastLogin(
-    memberId: number
-  ): Promise<MemberAccountCredentials> {
+  async updateMemberLastLogin(id: number): Promise<MemberAccountCredentials> {
     return prisma.memberAccountCredentials.update({
-      where: { memberId },
+      where: { id },
       data: { lastLoginAt: new Date() },
     });
   }
 
-  /**
-   * Delete member credentials
-   */
   async deleteMemberCredentials(id: number): Promise<MemberAccountCredentials> {
     return prisma.memberAccountCredentials.delete({
       where: { id },
     });
   }
 
-  /**
-   * Get instructor credentials by ID
-   */
   async getInstructorCredentialsById(
     id: number
   ): Promise<InstructorAccountCredentials | null> {
@@ -136,9 +107,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Get instructor credentials by instructor ID
-   */
   async getInstructorCredentialsByInstructorId(
     instructorId: number
   ): Promise<InstructorAccountCredentials | null> {
@@ -147,9 +115,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Get instructor credentials by username
-   */
   async getInstructorCredentialsByUsername(
     username: string
   ): Promise<InstructorCredentialsWithUser | null> {
@@ -161,9 +126,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Create instructor credentials
-   */
   async createInstructorCredentials(
     data: Prisma.InstructorAccountCredentialsCreateInput
   ): Promise<InstructorAccountCredentials> {
@@ -172,9 +134,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Update instructor credentials
-   */
   async updateInstructorCredentials(
     id: number,
     data: Prisma.InstructorAccountCredentialsUpdateInput
@@ -185,9 +144,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Update instructor password
-   */
   async updateInstructorPassword(
     instructorId: number,
     hashedPassword: string
@@ -198,9 +154,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Update instructor last login
-   */
   async updateInstructorLastLogin(
     instructorId: number
   ): Promise<InstructorAccountCredentials> {
@@ -210,9 +163,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Delete instructor credentials
-   */
   async deleteInstructorCredentials(
     id: number
   ): Promise<InstructorAccountCredentials> {
@@ -221,9 +171,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Get admin credentials by ID
-   */
   async getAdminCredentialsById(
     id: number
   ): Promise<AdminAccountCredentials | null> {
@@ -232,9 +179,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Get admin credentials by admin ID
-   */
   async getAdminCredentialsByAdminId(
     adminId: number
   ): Promise<AdminAccountCredentials | null> {
@@ -243,9 +187,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Get admin credentials by username
-   */
   async getAdminCredentialsByUsername(
     username: string
   ): Promise<AdminCredentialsWithUser | null> {
@@ -257,9 +198,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Create admin credentials
-   */
   async createAdminCredentials(
     data: Prisma.AdminAccountCredentialsCreateInput
   ): Promise<AdminAccountCredentials> {
@@ -268,9 +206,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Update admin credentials
-   */
   async updateAdminCredentials(
     id: number,
     data: Prisma.AdminAccountCredentialsUpdateInput
@@ -281,9 +216,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Update admin password
-   */
   async updateAdminPassword(
     adminId: number,
     hashedPassword: string
@@ -294,9 +226,6 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Update admin last login
-   */
   async updateAdminLastLogin(
     adminId: number
   ): Promise<AdminAccountCredentials> {
@@ -306,25 +235,19 @@ export class CredentialsService {
     });
   }
 
-  /**
-   * Delete admin credentials
-   */
   async deleteAdminCredentials(id: number): Promise<AdminAccountCredentials> {
     return prisma.adminAccountCredentials.delete({
       where: { id },
     });
   }
 
-  /**
-   * Check if username is available for members
-   */
-  async isMemberUsernameAvailable(
-    username: string,
+  async isMemberEmailAvailable(
+    email: string,
     excludeMemberId?: number
   ): Promise<boolean> {
     const existing = await prisma.memberAccountCredentials.findFirst({
       where: {
-        username: { equals: username },
+        email: { equals: email },
         ...(excludeMemberId && { memberId: { not: excludeMemberId } }),
       },
       select: { id: true },
@@ -332,9 +255,6 @@ export class CredentialsService {
     return !existing;
   }
 
-  /**
-   * Check if username is available for instructors
-   */
   async isInstructorUsernameAvailable(
     username: string,
     excludeInstructorId?: number
@@ -351,9 +271,6 @@ export class CredentialsService {
     return !existing;
   }
 
-  /**
-   * Check if username is available for admins
-   */
   async isAdminUsernameAvailable(
     username: string,
     excludeAdminId?: number
@@ -373,7 +290,7 @@ export class CredentialsService {
    */
   async isUsernameGloballyAvailable(username: string): Promise<boolean> {
     const [memberExists, instructorExists, adminExists] = await Promise.all([
-      this.isMemberUsernameAvailable(username),
+      this.isMemberEmailAvailable(username),
       this.isInstructorUsernameAvailable(username),
       this.isAdminUsernameAvailable(username),
     ]);
@@ -393,7 +310,7 @@ export class CredentialsService {
       | null;
   }> {
     // Check member credentials first
-    const memberCreds = await this.getMemberCredentialsByUsername(username);
+    const memberCreds = await this.getMemberCredentialsByEmail(username);
     if (memberCreds) {
       return { type: "member", credentials: memberCreds };
     }
